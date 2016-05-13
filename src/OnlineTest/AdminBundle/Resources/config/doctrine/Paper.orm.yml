@@ -1,0 +1,36 @@
+OnlineTest\AdminBundle\Entity\Paper:
+    type: entity
+    table: null
+    repositoryClass: OnlineTest\AdminBundle\Entity\PaperRepository
+    manyToOne:
+        exam:
+            targetEntity: OnlineTest\AdminBundle\Entity\Exam
+            inversedBy: papers
+            joinColumn:
+                name: exam_id
+                referencedColumn: id
+    oneToMany:
+        examRecords:
+            targetEntity: OnlineTest\MainBundle\Entity\ExamRecord
+            mappedBy: paper
+            cascade: ["all"]
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        paperName:
+            type: string
+            length: 255
+        duration:
+            type: integer
+            length: 10
+        usable:
+            type: integer
+            nullable: true
+        parts:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

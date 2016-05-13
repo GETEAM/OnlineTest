@@ -1,0 +1,45 @@
+{% extends "FOSUserBundle::layout.html.twig" %}
+
+{% trans_default_domain 'FOSUserBundle' %}
+
+{% block title %}用户登录{% endblock %}
+
+{% block fos_user_content %}
+    {% if error %}
+        <div>{{ error|trans }}</div>
+    {% endif %}
+        <div id="login">
+            <form action="{{ path("fos_user_security_check") }}" method="post">
+                
+                <div id="logintitle">
+                    <span class="titlefont">用户登录</span>
+                </div>
+                
+                <div class="formRow" hidden>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                </div>
+                
+                <div class="formRow">
+                    <img style="float:left;margin-top: 2px;" src="{{ asset('/bundles/onlinetestmain/images/login_user_hightlighted.png') }}" width="25px" height="25px"/>
+                    <input type="text" id="username" name="_username" placeHolder="用户名/邮箱" required="required" class="input_style"/>
+                </div>
+                
+                <div class="formRow">
+                    <img style="float:left;margin-top: 2px;" src="{{ asset('/bundles/onlinetestmain/images/login_key_hightlighted.png') }}" width="25px" height="25px"/>
+                    <input type="password" id="password" name="_password" placeHolder="密码" required="required" class="input_style"/>
+                </div>
+                
+                <div class="formRow">
+                    <input type="checkbox" id="remember_me" name="_remember_me" class="checkbox_style"/>
+                    <label for="remember_me" class="labelfont">两周内免登录</label>
+                    <a href="{{ path('resetting') }}" class="labelfont">?忘记密码</a>
+                </div>
+                    
+                <div class="formRow">
+                    <input type="submit" id="_submit" name="_submit" class="button button-rounded button-flat-action loginButton"  value="登录"/>
+                    <a href="{{ path('registration') }}" class="button button-rounded resetButton">快速注册</a>
+                </div>
+                
+            </form>
+        </div>
+{% endblock%}

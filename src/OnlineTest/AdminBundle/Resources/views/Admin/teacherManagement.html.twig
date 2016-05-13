@@ -1,0 +1,9 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('teacher_activation') }}" class="button button-rounded button-flat-primary">教师用户激活</a></li> 
+    </ul>
+    <ul>
+        <li><a href="{{ url('teacher_list') }}" class="button button-rounded button-flat-primary">可用教师列表</a></li> 
+    </ul>
+{% endblock %}

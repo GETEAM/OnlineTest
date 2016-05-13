@@ -1,0 +1,108 @@
+{% extends 'OnlineTestMainBundle::student.html.twig' %}
+{% block stylesheets %}
+    {{ parent()}}
+    {%  stylesheets 
+                '@OnlineTestMainBundle/Resources/public/css/login.css' 
+    %}
+    <link rel="stylesheet" href="{{asset_url}}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+
+        <div id="login">
+            <form action="{{ path("student_login_check") }}"  method="post">
+                
+                <div id="logintitle">
+                    <span class="titlefont">用户登录</span>
+                </div>
+                
+                <div class="formRow" hidden>
+                    <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
+                </div>
+                <div  style="text-align: center;color: #b92c28;">
+                        {% if isAvailabe == -1 %}<span>链接有误，请重新打开正确链接</span>
+                        {%elseif isAvailabe == 0 %}<span>该问卷调查已结束</span>
+                        {% endif %}
+                </div>
+                <div  style="text-align: center;color: #b92c28;">
+                        {{ error }}
+                </div>
+                {% if isAvailabe == 1 %}
+                <div id="realname_login">
+                    <div class="formRow" hidden>
+                        <input type="hidden" id="examId"  value="{{ examId }}"/>
+                    </div>
+                    <div class="formRow" hidden>
+                        <input type="hidden" id="isAvailabe" name="_target_path" value="{{ isAvailabe }}"/>
+                    </div>
+                    <div class="formRow">
+                        <table style="border: 0;width:300px;">
+                            <tr style="border: 0;">
+                                <td>
+                                    <img style="margin-top: 2px;" src="{{ asset('/bundles/onlinetestmain/images/login_user_hightlighted.png') }}" width="25px" height="25px"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="student_name" name="_student_name" placeHolder="请输入用户名" required="required" class="input_style" autocomplete="off"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="formRow" hidden>
+                        <table style="border: 0;width:300px;">
+                            <tr>
+                                <td>
+                                    <img style="margin-top: 2px;" src="{{ asset('/bundles/onlinetestmain/images/login_user_hightlighted.png') }}" width="25px" height="25px"/>
+                                </td>
+                                <td>
+                                    <input type="text" id="username" name="_username"  required="required" class="input_style"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="formRow">
+                        <table style="border: 0;width:300px;">
+                            <tr>
+                                <td>
+                                    <img style="margin-top: 2px;" src="{{ asset('/bundles/onlinetestmain/images/login_key_hightlighted.png') }}" width="25px" height="25px"/>
+                                </td>
+                                <td>
+                                    <input type="password" id="password" name="_password" placeHolder="请输入密码" required="required" class="input_style"/>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+
+                    <div class="formRow" hidden>
+                        <input type="hidden" name="_target_path" value="/student/exam/prepare/realname?examId="/>
+                    </div>
+
+                    <div class="formRow">
+                        <input type="submit" id="_submit" name="_submit" class="button button-rounded button-flat-action loginButton" style="background-color: #008e66" value="登录"/>
+                        <input type="reset" name="reset" value="取消" class="button button-rounded resetButton" />
+                    </div>
+                    
+                </div>
+                <div id="unrealname_login" hidden>
+                    <div class="formRow">
+                        <a href="/student/exam/prepare/unrealname?examId=" class="button button-rounded button-flat-action loginButton" style="background-color: #008e66;width: 250px;">匿名登录</a>
+                    </div>
+                </div>
+                {% endif %}
+            </form>
+        </div>
+{% endblock%}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestMainBundle/Resources/public/js/studentLogin.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

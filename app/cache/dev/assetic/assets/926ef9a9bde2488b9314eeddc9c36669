@@ -1,0 +1,51 @@
+.left_infor {
+	margin: 5px;
+        padding: 5px;
+        border: 1px solid #D3D3D3;
+}
+.left_title {
+    background-color: #31ae86;
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid #D3D3D3;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 2px;
+}
+.question_link_table {
+    width: 150px;
+    margin-right: auto;
+    margin-left: auto;
+}
+.td_undo{
+    text-align: center;
+    width: 20px;
+    margin: 5px;
+    height: 20px;
+    cursor: pointer;
+}
+.td_done{
+    font-weight: bold;
+    color: #67b168;
+}
+.question_textarea {
+    height: 100px;
+    width: 700px;
+    font-weight: normal;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+.question_stem {
+    word-break: break-all;
+}
+.time_font {
+    color: red;
+    text-align: center;
+    font-weight: bolder;
+}

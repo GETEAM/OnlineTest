@@ -1,0 +1,38 @@
+OnlineTest\AdminBundle\Entity\Question:
+    type: entity
+    table: null
+    repositoryClass: OnlineTest\AdminBundle\Entity\QuestionRepository
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        questionContent:
+            type: text
+            column: question_content
+        questionImages:
+            type: text
+            column: question_images
+            nullable: true
+        answer:
+            type: string
+            length: 255
+            nullable: true
+        type:
+            type: string
+            length: 255
+        kind:
+            type: string
+            length: 255
+        isMustSelect:
+            type: integer
+            length: 1
+        isOptionShuffle:
+            type: integer
+            length: 1
+        optionRate:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

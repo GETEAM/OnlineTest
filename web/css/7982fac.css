@@ -1,0 +1,60 @@
+#login {
+	width: 400px;
+        overflow: hidden;
+        border: 1px solid #008e66;
+        padding: 25px 0;
+        position: absolute;
+        left: 50%;
+        top: 50%;
+	margin-left: -200px;
+        margin-top: -200px;
+}
+
+#logintitle {
+        text-align: center;
+	margin-bottom: 25px;
+}
+.formRow {
+	height: 32px;
+	width: 300px;
+	margin-top: 15px;
+	margin-bottom: 15px;
+        margin-left: auto;
+        margin-right: auto;
+        vertical-align: middle;
+}
+
+.input_style {
+	height: 30px;
+	width: 250px;
+	border: 1px solid #008e66;
+	clear: right;
+	background-color: #eef3f7;
+        padding-left: 5px; 
+        margin-left: 5px;
+        line-height: 30px;
+        clear: right;
+}
+.checkbox_style {
+    position: relative;
+    top: 3px;
+    left: 35px;
+}
+.labelfont {
+    color: #008e66;
+    font-weight: normal;
+    font-size: 14px;
+    margin-bottom: 0px;
+    margin-left: 35px;
+}
+.loginButton,.loginButton:hover {
+    margin-left: 35px;
+    width: 100px;
+    background-color: #008e66;
+}
+.resetButton {
+    width: 100px;
+    margin-left: 35px;
+    padding: 0px;
+    line-height: 32px;
+}

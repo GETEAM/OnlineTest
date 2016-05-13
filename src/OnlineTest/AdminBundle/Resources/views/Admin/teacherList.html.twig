@@ -1,0 +1,63 @@
+{% extends 'OnlineTestAdminBundle:Admin:teacherManagement.html.twig' %}
+{% block function_title %}
+    <span>可用教师列表</span>
+{% endblock %}
+{% block function_content %}
+    <div class="operation_func">
+        <a href="#" onclick="deactiveSelectedTeachers()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/unable_1.png') }}"/>失效
+        </a>
+        <a href="#" onclick="deleteSelectedTeachers()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>删除
+        </a>
+    </div> 
+    <table id="enabledTeachers">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll" class="checkall"></th>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>邮箱</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for admin in admins %}
+                <tr>
+                    <td><input type="checkbox" name="checkOne" class="checkall" value="{{ admin.username }}" /></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ admin.username }}</td>
+                    <td>{{ admin.name }}</td>
+                    <td>{{ admin.email }}</td>
+                    <td>
+                        <a href="{{ path('deactive_teacher',{'username': admin.username }) }}" style="margin-left: 0px;">
+                            <img src="{{ asset('/bundles/onlinetestmain/images/unable_1.png') }}"/>
+                        </a>
+                        <a href="#" onclick="delconfirm('{{ admin.username }}')" style="margin-left: 0px;">
+                            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.tablesorter.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/teacherList.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

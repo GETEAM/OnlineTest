@@ -1,0 +1,32 @@
+OnlineTest\MainBundle\Entity\ExamRecord:
+    type: entity
+    table: null
+    repositoryClass: OnlineTest\MainBundle\Entity\ExamRecordRepository
+    manyToOne:
+        paper:
+            targetEntity: OnlineTest\AdminBundle\Entity\Paper
+            inversedBy: examRecords
+            joinColumn:
+                name: paperId
+                referencedColumn: id
+            cascade: ["remove"]
+        student:
+            targetEntity: OnlineTest\AdminBundle\Entity\Student
+            inversedBy: examRecords
+            joinColumn:
+                name: student_username
+                referencedColumn: id
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        answers:
+            type: text
+            nullable: true
+        score:
+            type: integer
+            nullable: true
+    lifecycleCallbacks: {  }

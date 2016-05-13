@@ -1,0 +1,13 @@
+parameters:
+#    online_test_admin.example.class: OnlineTest\AdminBundle\Example
+
+services:
+    onlinetest_admin.registration.form.type:
+        class: OnlineTest\AdminBundle\Form\Type\RegistrationFormType
+        tags:
+            - { name: form.type, alias: onlinetest_admin_registration }
+            
+    onlinetest_admin.info.form.type:
+        class: OnlineTest\AdminBundle\Form\Type\ProfileFormType
+        tags:
+            - { name: form.type, alias: onlinetest_admin_info}

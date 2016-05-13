@@ -1,0 +1,48 @@
+OnlineTest\AdminBundle\Entity\Exam:
+    type: entity
+    table: null
+    repositoryClass: OnlineTest\AdminBundle\Entity\ExamRepository
+    oneToMany:
+        students:
+            targetEntity: OnlineTest\AdminBundle\Entity\Student
+            mappedBy: exam
+        papers:
+            targetEntity: OnlineTest\AdminBundle\Entity\Paper
+            mappedBy: exam
+            
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        examId:
+            type: string
+            length: 255
+            column: exam_id
+            nullable: true
+        examName:
+            type: string
+            length: 255
+            column: exam_name
+        starttime:
+            type: datetime
+        endtime:
+            type: datetime
+        isRealName:
+            type: integer
+            length: 1
+            column: isRealName
+        isOverAndSave:
+            type: integer
+            nullable: true
+            length: 1
+            column: isOverAndSave
+        questions:
+            type: text
+            nullable: true
+        kinds:
+            type: text
+            nullable: true
+    lifecycleCallbacks: {  }

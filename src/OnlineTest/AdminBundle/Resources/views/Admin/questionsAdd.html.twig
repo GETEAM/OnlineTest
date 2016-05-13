@@ -1,0 +1,343 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {%  stylesheets                
+                '@OnlineTestAdminBundle/Resources/public/css/combox_style.css'
+                
+                
+    %}
+    <link rel="stylesheet" href="{{asset_url}}"/>
+    {% endstylesheets %}
+    
+{% endblock %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('add_questions',{'examId': exam.id}) }}" class="button button-rounded button-flat-primary">添加试题</a></li> 
+    </ul>
+{% endblock %}
+{% block function_title %}
+    <span>添加试题</span>
+{% endblock %}
+{% block function_content %}
+    <div id="exam_infor">
+        <div id="examId" hidden>{{ exam.id }}</div>
+        <div class="font_examName">
+            {{ exam.examName }}
+        </div>
+        <div class="font_paperInfor">
+            开始时间：{{ exam.starttime|date("Y-m-d H:i") }}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            开始时间：{{ exam.endtime|date("Y-m-d H:i") }}
+        </div>
+    </div>
+    {% if hasQuestions==0 %}
+        <div id="hasQuestions">该试卷暂无考题，请点击右侧功能图标进行添加。</div>
+    {% endif %}
+    <div id="questions_area">
+        {% for key, question in questions %}
+            <div id="question_{{ question.id }}" class="questions">
+                <span class="order_num">{{ loop.index }}</span>
+                <span class="question_infor">{% 
+                    if question.isMustSelect==1 
+                    %}(必选){% 
+                    else %}(可选){% endif %}({{ question.kind }})</span>
+                <span class="question_id" hidden>{{ question.id }}</span>
+                <span class="question_isMustSelect" hidden>{{ question.isMustSelect }}</span>
+                <span class="question_kind" hidden>{{ question.kind }}</span>
+                <span class="question_isOptionShuffle" hidden>{{ question.isOptionShuffle }}</span>
+                {% if question.type == 'single_choice_no_img' %}
+                    <span class="question_stem">{{ questions_content[key]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                    {% for key,question_option in questions_content[key]['question_options'] %}
+                        <pre><input  type="radio" id="question_{{ question.id }}_option_{{ key+1 }}"  
+                                name="question_{{ question.id }}_option_radio"  
+                                value="{{ key+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                            {% if question.answer == (key+1) %}{{ 'checked' }}{% endif %}/><label  for="question_{{ question.id }}_option_{{ key+1 }}" 
+                                class="option_label">{{ question_option }}</label></pre>
+                    {% endfor %}
+                {% elseif question.type == 'single_choice_img'%}
+                    <span class="question_stem"><span>{{ questions_content[key]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span>
+                        {%if questions_images[key][0]%}<br/><img src="/{{ questions_images[key][0] }}"/>{% endif %}</span><br/>
+                    {% for key1,question_option in questions_content[key]['question_options'] %}
+                        <pre><input  type="radio" id="question_{{ question.id }}_option_{{ key1+1 }}"  
+                                name="question_{{ question.id }}_option_radio"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                            {% if question.answer == (key1+1) %}{{ 'checked' }}{% endif %}/><label  for="question_{{ question.id }}_option_{{ key1+1 }}" 
+                                class="option_label"><span>{{ question_option }}</span>{% if questions_images[key][key1+1]!="0" and  question_option!="" %}</br>{% endif %}{%if questions_images[key][key1+1]%}<img src="/{{ questions_images[key][key1+1] }}"/>{%endif%}</label></pre>
+                    {% endfor %}
+                {% elseif question.type == 'multiple_choices_no_img' %}
+                    <span class="question_stem">{{ questions_content[key]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                    {% for key1,question_option in questions_content[key]['question_options'] %}
+                        <pre><input  type="checkbox" id="question_{{ question.id }}_option_{{ key1+1 }}"  
+                                name="question_{{ question.id }}_option_checkbox"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                            {% if (key1+1) in mul_choices_answers[key] %}{{ 'checked' }}{% endif %}/><label  for="question_{{ question.id }}_option_{{ key1+1 }}" 
+                                class="option_label">{{ question_option }}</label></pre>
+                    {% endfor %}
+                {% elseif question.type == 'short_answer_no_img'%}
+                    <span class="question_stem"><span>{{ questions_content[key]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span><br/>         
+                {% elseif question.type == 'short_answer_img'%}
+                    <span class="question_stem"><span>{{ questions_content[key]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span>         
+                    {%if questions_images[key][0]%}<br/><img src="/{{ questions_images[key][0] }}"/>{% endif %}</span><br/>
+                {% endif %}
+                <div class="questions_operations">
+                    <a href="#" onclick="open_edit_question_dialog('{{ question.id }}','{{ question.type }}')" 
+                            class="button button-rounded button-flat-primary button-tiny question_op"
+                            >编辑</a>
+                    <a href="#" onclick="delete_question_confirm('{{ question.id }}')" 
+                            class="button button-rounded button-flat-primary button-tiny question_op"
+                            >删除</a>
+                </div>
+            </div>
+
+        {% endfor %}
+    </div>
+    <div id="dialog_add_questions" title="添加试题">
+        <div>
+            <label for="questions_type" class="dialog_label">试题类型：</label>
+            <select id="question_type" class="text ui-widget-content ui-corner-all dialog_input">  
+                <option name="questions_type_options" value ="single_choice_no_img">单项选择题-无图片</option>  
+                <option name="questions_type_options" value ="single_choice_img">单项选择题-有图片</option>
+                <option name="questions_type_options" value="multiple_choices_no_img">多选题-无图片</option>
+                <option name="questions_type_options" value="short_answer_no_img">简答题-无图片</option>  
+                <option name="questions_type_options" value="short_answer_img">简答题-有图片</option>  
+            </select>
+        </div>
+        <div id="question_kind_div">
+            <label for="questions_kind" class="dialog_label">所属类别：</label>
+            <span id="questions_kind" class="dialog_input"></span>
+        </div>
+        <div>
+            <label for="mustSelect" class="dialog_label">是否必选：</label>
+            <input type="radio" id="mustSelect_radio0" name="mustSelect" value="0" >
+            <label for="mustSelect_radio0" class="dialog_radio_label" >否&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="radio" id="mustSelect_radio1" name="mustSelect" value="1" checked >
+            <label for="mustSelect_radio1" class="dialog_radio_label" >是&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+        <div>
+            <label for="optionShuffle" class="dialog_label">选项乱序：</label>
+            <input type="radio" id="optionShuffle_radio0" name="optionShuffle" value="0" >
+            <label for="optionShuffle_radio0" class="dialog_radio_label" >否&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="radio" id="optionShuffle_radio1" name="optionShuffle" value="1" checked >
+            <label for="optionShuffle_radio1" class="dialog_radio_label" >是&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+        <form id="single_choice_no_img">
+            <fieldset>
+                <div>
+                    <label for="SCNI_stem_textarea" class="dialog_label">题干内容：</label>
+                    <textarea id="SCNI_stem_textarea" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入题干内容"></textarea>
+                </div>
+                <div>
+                    <label for="SCNI_question_option1" class="dialog_label">
+                        <input type="radio" name="SCNI_option_radio" value="1"/>选项1：
+                    </label>
+                    <textarea id="SCNI_question_option1" 
+                              name="SCNI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>
+                </div>
+                <div>
+                    <label for="SCNI_question_option2" class="dialog_label">
+                        <input type="radio" name="SCNI_option_radio" value="2"/>选项2：
+                    </label>
+                    <textarea id="SCNI_question_option2" 
+                              name="SCNI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>                   
+                </div> 
+            </fieldset>
+            <div style="margin-left: 385px;">
+                <a href="#" onclick="add_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                    添加选项
+                </a>
+                <a href="#" onclick="minus_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                    减少选项
+                </a>
+            </div>
+            
+        </form>
+        <form id="single_choice_img"  hidden>
+            <fieldset>
+                <div>
+                    <label for="SCI_stem_textarea" class="dialog_label">题干内容：</label>
+                    <textarea id="SCI_stem_textarea" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入题干内容"></textarea>
+                    <input type="file" id="SCI_stem_img" name="SCI_stem_img"  class="dialog_file" />
+                </div>
+                <div>
+                    <label for="SCI_question_option1" class="dialog_label">
+                        <input type="radio" name="SCI_option_radio" value="1"/>选项1：
+                    </label>
+                    <textarea id="SCI_question_option1" 
+                              name="SCI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>
+                    <input type="file" id="SCI_question_option1_img"  name="SCI_question_option1_img" class="dialog_file" />
+                </div>
+                <div>
+                    <label for="SCI_question_option2" class="dialog_label">
+                        <input type="radio" name="SCI_option_radio" value="2"/>选项2：
+                    </label>
+                    <textarea id="SCI_question_option2" 
+                              name="SCI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>
+                    <input type="file" id="SCI_question_option2_img" name="SCI_question_option2_img" class="dialog_file" />
+                </div> 
+            </fieldset>
+            <div style="margin-left: 385px;">
+                    <a href="#" onclick="add_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                        添加选项
+                    </a>
+                    <a href="#" onclick="minus_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                        减少选项
+                    </a>
+            </div>
+        </form>
+        <form id="multiple_choices_no_img" hidden>
+            <fieldset>
+                <div>
+                    <label for="MCNI_stem_textarea" class="dialog_label">题干内容：</label>
+                    <textarea id="MCNI_stem_textarea" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入题干内容"></textarea>
+                </div>
+                <div>
+                    <label for="MCNI_question_option1" class="dialog_label">
+                        <input type="checkbox" name="MCNI_option_checkbox" value="1"/>选项1：
+                    </label>
+                    <textarea id="MCNI_question_option1" 
+                              name="MCNI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>
+                </div>
+                <div>
+                    <label for="MCNI_question_option2" class="dialog_label">
+                        <input type="checkbox" name="MCNI_option_checkbox" value="2"/>选项2：
+                    </label>
+                    <textarea id="MCNI_question_option2" 
+                              name="MCNI_question_option" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入选项内容"></textarea>
+                </div>
+            </fieldset>
+            <div style="margin-left: 385px;">
+                <a href="#" onclick="add_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                    添加选项
+                </a>
+                <a href="#" onclick="minus_question_option()" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;color: #fff;">
+                    减少选项
+                </a>
+            </div>
+        </form>
+        <form id="short_answer_no_img" hidden>
+            <fieldset>
+                <div>
+                    <label for="SANI_stem_textarea" class="dialog_label">题干内容：</label>
+                    <textarea id="SANI_stem_textarea" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入题干内容"></textarea>
+                </div>
+            </fieldset>
+        </form>
+        <form id="short_answer_img" hidden>
+            <fieldset>
+                <div>
+                    <label for="SAI_stem_textarea" class="dialog_label">题干内容：</label>
+                    <textarea id="SAI_stem_textarea" 
+                              class='text ui-widget-content ui-corner-all dialog_textarea' 
+                              placeholder="请输入题干内容"></textarea>
+                    <input type="file" id="SAI_stem_img" name="SAI_stem_img"  class="dialog_file" />
+                </div>
+            </fieldset>
+        </form>
+        
+    </div>
+    <div id="dialog_edit_questions" title="编辑试题">
+        <div>
+            <label for="edit_questions_type" class="dialog_label">试题类型：</label>
+            <select id="edit_question_type" class="text ui-widget-content ui-corner-all dialog_input" disabled>  
+                <option name="edit_questions_type_options" value ="single_choice_no_img">单项选择题-无图片</option>  
+                <option name="edit_questions_type_options" value ="single_choice_img">单项选择题-有图片</option>  
+                <option name="edit_questions_type_options" value="short_answer_no_img">简答题-无图片</option>  
+                <option name="edit_questions_type_options" value="short_answer_img">简答题-有图片</option>  
+            </select>
+        </div>
+        <div id="edit_question_kind_div">
+            <label for="edit_questions_kind" class="dialog_label">所属类别：</label>
+            <span id="edit_questions_kind" class="dialog_input"></span>
+        </div>
+        <div>
+            <label for="edit_mustSelect" class="dialog_label">是否必选：</label>
+            <input type="radio" id="edit_mustSelect_radio0" name="edit_mustSelect" value="0" >
+            <label for="edit_mustSelect_radio0" class="dialog_radio_label" >否&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="radio" id="edit_mustSelect_radio1" name="edit_mustSelect" value="1" checked >
+            <label for="edit_mustSelect_radio1" class="dialog_radio_label" >是&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+        <div>
+            <label for="edit_optionShuffle" class="dialog_label">选项乱序：</label>
+            <input type="radio" id="edit_optionShuffle_radio0" name="edit_optionShuffle" value="0" >
+            <label for="edit_optionShuffle_radio0" class="dialog_radio_label" >否&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="radio" id="edit_optionShuffle_radio1" name="edit_optionShuffle" value="1" checked >
+            <label for="edit_optionShuffle_radio1" class="dialog_radio_label" >是&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+        <div>
+            <input id="edit_question_id" value="" hidden />
+        </div>
+        <form id="edit_single_choice_no_img">
+            <fieldset> 
+            </fieldset>
+        </form>
+        <form id="edit_single_choice_img">
+            <fieldset> 
+            </fieldset>
+        </form>
+        <form id="edit_short_answer_no_img">
+            <fieldset> 
+            </fieldset>
+        </form>
+        <form id="edit_short_answer_img">
+            <fieldset> 
+            </fieldset>
+        </form>
+    </div>
+    <div id="questions_tool">
+        {% if exam.isOverAndSave==0 %}
+            <a href="#" onclick="open_add_questions_dialog({{ exam.id }})" class="button glow button-rounded button-flat-primary question_tool_button">添加试题</a>
+            <a href="#" onclick="save_add()" class="button glow button-rounded button-flat-primary question_tool_button">保存添加</a>
+            <a href="{{ url('exam_list',{'exam_status': "all"}) }}" class="button glow button-rounded button-flat-primary question_tool_button">返回列表</a>
+        {% else %}
+            <a href="#" class="button glow button-rounded button-flat-primary question_tool_button">非编辑状态</a>
+            <a href="{{ url('exam_list',{'exam_status': "all"}) }}" class="button glow button-rounded button-flat-primary question_tool_button">返回列表</a>
+        {% endif %}
+    </div>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/autoTextarea.js'
+        '@OnlineTestAdminBundle/Resources/public/js/ajaxfileupload.js'
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.combox.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/questionsAdd.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('registration') }}" class="button button-rounded button-flat-primary">教师注册</a></li> 
+    </ul>
+{% endblock %}
+{% block menu %}
+{% endblock %}
+{% block function_title %}
+    <span>教师注册</span>
+{% endblock %}
+{% block function_content %}
+    {% block fos_user_content %}
+        {% include "FOSUserBundle:Registration:register_content.html.twig" %}
+    {% endblock fos_user_content %}
+{% endblock %}

@@ -1,0 +1,80 @@
+{% extends 'OnlineTestAdminBundle:Admin:resultManagement.html.twig' %}
+{% block function_title %}
+    <span>考试结果详情列表</span>
+{% endblock %}
+{% block function_content %}
+    <div style="color:#e38d13;">共：{{ records_num }}考试记录</div></br>
+    <div class="operation_func">
+        <a href="#" onclick="deleteSelectedRecords()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>删除
+        </a>&nbsp;&nbsp;
+        <a href="{{ url('export_excel', {
+                                    'paperId': paperId }) }}"  style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/export.png') }}"/>导出Excel表
+        </a>
+    </div> 
+    <table id="result_detail">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll" class="checkall"></th>
+                <th>序号</th>
+                <th>试卷名称</th>
+                <th>考号</th>
+                <th>姓名</th>
+                <th>主观题分数</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if hasRecords==0 %}
+                <tr>
+                    <td colspan="7">该考试暂无考试记录！</td>
+                </tr>
+            {% endif %}
+            {% if hasRecords==1 %}
+                {% for exam_record in exam_records %}
+                    <tr>
+                        <td><input type="checkbox" name="checkOne" class="checkall" value="{{ exam_record.id }}" /></td>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ exam_record.paper.paperName }}</td>
+                        <td>{% if exam_record.student 
+                            %}{{ exam_record.student.studentName }}{%
+                            else %}匿名{% endif %}</td>
+                        <td>{% if exam_record.student 
+                            %}{{ exam_record.student.name }}{%
+                            else %}匿名{% endif %}</td>
+                        <td>{{ exam_record.score}}</td>
+                        <td>
+                            <a href="{{ url('answers_detail', {
+                                        'recordId': exam_record.id }) }}" target="_blank" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:55px;margin-left: 0px;">
+                                    答卷详情
+                            </a>
+                            <a href="#" onclick="delconfirm({{ exam_record.id }})" style="margin-left: 0px;">
+                                <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %} 
+            {% endif %}
+        </tbody>
+    </table>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.tablesorter.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/resultDetail.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.min.js'
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

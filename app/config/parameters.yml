@@ -1,0 +1,17 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_driver: pdo_mysql
+    database_host: localhost
+    database_port: null
+    database_name: online_test
+    database_user: root
+    database_password: 123
+    mailer_transport: smtp
+    mailer_host: mail.ustc.edu.cn
+    mailer_user: fenggao@mail.ustc.edu.cn
+    mailer_password: gf910923
+    locale: zh_CN
+    secret: ThisTokenIsNotSoSecretChangeIt
+    debug_toolbar: true
+    debug_redirects: false
+    use_assetic_controller: true

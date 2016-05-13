@@ -1,0 +1,48 @@
+  
+student_logout:
+    path: /student/logout
+    
+
+    
+student_login:
+    path: /student/login/{examId}
+    defaults: { _controller: OnlineTestMainBundle:Security:login, examId: 0}
+    
+student_login_check:
+    path: /student/login_check
+
+exam_isRealname:
+    path:  /student/exam/isRealname
+    defaults: { _controller: OnlineTestMainBundle:Main:isRealname } 
+   
+exam_prepare:
+    path:  /student/exam/prepare/{isrealname}
+    defaults: { _controller: OnlineTestMainBundle:Main:examPrepare }  
+    
+which_paper:
+    path:  /student/exam/which_paper
+    defaults: { _controller: OnlineTestMainBundle:Main:whichPaper }
+   
+exam_paper_status:
+    path:  /student/exam/paper_status
+    defaults: { _controller: OnlineTestMainBundle:Main:paperStatus }
+    
+exam_student_status:
+    path:  /student/exam/student_status
+    defaults: { _controller: OnlineTestMainBundle:Main:studentStatus }
+    
+exam:
+    path:  /student/exam/{isrealname}/{paperId}
+    defaults: { _controller: OnlineTestMainBundle:Main:exam }
+    
+submit_paper:
+    path:  /student/exam/submit_paper
+    defaults: { _controller: OnlineTestMainBundle:Main:submitPaper }
+    
+examed:
+    path:  /student/exam/examed
+    defaults: { _controller: OnlineTestMainBundle:Main:examed }
+
+      
+    
+

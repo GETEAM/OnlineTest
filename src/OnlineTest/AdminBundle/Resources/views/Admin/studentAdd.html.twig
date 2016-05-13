@@ -1,0 +1,35 @@
+{% extends 'OnlineTestAdminBundle:Admin:studentManagement.html.twig' %}
+{% block function_title %}
+    <span>添加学生</span>
+{% endblock %}
+{% block function_content %}
+    <form action="" {{ form_enctype(form) }} method="POST">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.examName)}}
+        {{ form_row(form.student_name, {'attr': {'placeholder': '请输入学号', 'autocomplete': 'off'} }) }}
+        {{ form_row(form.username) }}
+        {{ form_row(form.name, {'attr': {'placeholder': '请输入姓名', 'autocomplete': 'off'} }) }}
+        {{ form_row(form.password, {'attr': {'placeholder': '请输入密码', 'autocomplete': 'off'} }) }}
+        {{ form_row(form.save, {'attr': {'class': 'button button-rounded button-flat-action submitButtonStyle'} }) }}
+        {{ form_row(form.cancel, {'attr': {'class': 'button button-rounded resetButton resetButtonStyle'} }) }}
+        {{ form_end(form, {'render_rest': true}) }}
+    </form>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/studentAdd.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

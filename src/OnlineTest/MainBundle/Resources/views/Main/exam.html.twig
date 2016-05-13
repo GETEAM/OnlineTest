@@ -1,0 +1,192 @@
+{% extends 'OnlineTestMainBundle::student.html.twig' %}
+
+{% block admin_main_left %}
+    <div id="student_infor" class="left_infor">
+        <div class="left_title">
+            用户信息
+        </div>
+        {% if exam.isRealName==1 %}
+            <div id="student_username" hidden>{{ app.user.username }}</div>
+            <div>
+                用户名：{{ app.user.studentName }}
+            </div>
+            <div>
+                姓&nbsp;&nbsp;&nbsp;&nbsp;名：{{ app.user.name }}
+            </div>
+
+        {% else %}
+            <div>
+                <div id="student_username" hidden>匿名</div>
+                匿名考试无信息
+            </div>
+
+        {% endif %}
+    </div>
+    <div id="paper_infors" class="left_infor" hidden>
+        <div id="paper_infor_paperId">{{ paper.id }}</div>
+        <div id="paper_infor_isrealname">{{ exam.isRealName }}</div>
+        <div id="paper_infor_resttime">{{ (paper.duration)*60}}</div>
+    </div>
+    <div id="time_infor" class="glow left_infor">
+        <div class="left_title">
+            剩余时间
+        </div>
+        <div id="time_infor_resttime">
+        </div>
+    </div>
+    <div id="questions_link" class="left_infor">
+        <div class="left_title">
+            试题列表
+        </div>
+        <div>
+            {% for key, part in parts %}
+            <div class="left_title">
+                Part {{ key+1 }}
+            </div>
+            <table class="question_link_table">
+            {% if part['question_rows']>1 %}
+                {% for i in 0..(part['question_rows']-2) %}
+                    <tr>
+                        {% for j in 1..part['question_pre_row'] %}
+                            <td onclick="locate({{key+1}},{{ (i*part['question_pre_row']+j) }});" id="td_{{key+1}}_{{ (i*part['question_pre_row']+j) }}" class="td_undo">{{ (i*part['question_pre_row']+j) }}</td>
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                <tr>
+                    {% for k in ((part['question_rows']-1)*part['question_pre_row']+1)..part['question_num'] %}
+                        <td onclick="locate({{key+1}},{{ k }});" id="td_{{key+1}}_{{ k }}" class="td_undo">{{ k }}</td>        
+                    {% endfor %}
+                    {% if (part['question_rows']*part['question_pre_row'])>=(part['question_num']+1) %}
+                        {% for p in (part['question_num']+1)..(part['question_rows']*part['question_pre_row']) %}
+                            <td class="td_undo"> </td>        
+                        {% endfor %}
+                    {% endif %}
+                </tr>
+            {% endif %}
+            {% if part['question_rows']==1 %}
+            <tr>
+                {% for k in 1..part['question_num'] %}
+                    <td onclick="locate({{key+1}},{{ k }});" id="td_{{key+1}}_{{ k }}" class="td_undo">{{ k }}</td>        
+                {% endfor %}
+                {% if (part['question_rows']*part['question_pre_row'])>=(part['question_num']+1) %}
+                    {% for p in (part['question_num']+1)..(part['question_rows']*part['question_pre_row']) %}
+                        <td class="td_undo"> </td>        
+                    {% endfor %}
+                {% endif %}
+            </tr>
+            {% endif %}
+            </table>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}
+
+{% block function_content %}
+    <div id="paper_infor">
+        <div id="paperId" hidden>{{ paper.id }}</div>
+        <div id="examId" hidden>{{ paper.exam.id }}</div>
+        <div class="font_examName">
+            {{ paper.exam.examName }}
+        </div>
+        <div class="font_paperInfor">
+            {{ paper.paperName }}
+        </div>
+        <div class="font_paperInfor">
+            开始时间：{{ paper.exam.starttime|date("Y-m-d H:i") }}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            结束时间：{{ paper.exam.endtime|date("Y-m-d H:i") }}
+        </div>
+    </div>
+    <div id="parts_area">
+        {% if hasParts==0 %}
+            <div id="hasParts">该试卷暂无考题块，请点击右侧功能图标进行添加。</div>
+        {% else %}
+            <ul>
+                {% for key, part in parts %}
+                    <li><a href="#Part{{ key+1 }}">Part {{ key+1 }}</a></li>
+                    {% endfor %}
+            </ul>
+            {% for part_key, part in parts %}
+                <div id="Part{{ part_key+1 }}" class="part_area">
+                    {% for key, questionId in part['questions'] %}
+                        <div id="question_{{ questionId }}" class="questions">
+                            <span class="order_num" href="#q_{{part_key+1}}_{{ loop.index }}" id="q_{{part_key+1}}_{{ loop.index }}">{{ loop.index }}</span>
+                            <span class="question_id" hidden>{{ questionId }}</span>
+                            <span class="question_in_part" hidden>{{ part_key+1 }}</span>
+                            <span class="question_type" hidden>{{ questions[questionId].type }}</span>
+                            {% if questions[questionId].type == 'single_choice_no_img' %}
+                                <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                                {% for key,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key+1 }}"  
+                                name="question_{{ questions[questionId].id }}_option_radio"  
+                                value="{{ key+1 }}"  
+                                class="option_radio"  
+                                /><label  for="question_{{ questions[questionId].id }}_option_{{ key+1 }}" 
+                                class="option_label1">{{ question_option }}</label></pre>
+                                    {% endfor %}
+                            {% elseif questions[questionId].type == 'single_choice_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span>
+                                    {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                                    {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_radio"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                /><label  for="question_{{ questions[questionId].id }}_option_{{ key1+1 }}" 
+                                class="option_label1"><span>{{ question_option }}</span>{% if questions_images[questionId][key1+1]!="0" and  question_option!="" %}</br>{% endif %}{%if questions_images[questionId][key1+1]%}<img src="/{{ questions_images[questionId][key1+1] }}"/>{%endif%}</label></pre>
+                                {% endfor %}
+                            {% elseif questions[questionId].type == 'multiple_choices_no_img' %}
+                                <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                                {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="checkbox" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_checkbox"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                /><label  for="question_{{ questionId }}_option_{{ key1+1 }}" 
+                                class="option_label1">{{ question_option }}</label></pre>
+                                {% endfor %}
+                            {% elseif questions[questionId].type == 'short_answer_no_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span><br/>         
+                                <pre><textarea id="question_{{ questionId }}_answer" 
+                                    style="min-height:200px; overflow:hidden;"
+                                    class='text ui-widget-content ui-corner-all question_textarea1' 
+                                    placeholder="请输入答案"></textarea></pre>
+                            {% elseif questions[questionId].type == 'short_answer_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span>         
+                                {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                                <pre><textarea id="question_{{ questionId }}_answer" 
+                                        style="min-height:200px; overflow:hidden;"
+                                        class='text ui-widget-content ui-corner-all question_textarea1' 
+                                        placeholder="请输入答案"></textarea></pre>
+                            {% endif %}
+                
+            </div>
+
+                    {% endfor %}
+            </div>
+            {% endfor %}
+        {% endif %}
+        <br>
+        <div>
+            <a href="#" onclick="submit_paper_isAuto(0)" style="margin-left:150px;" id="end_exam" class="button glow button-rounded button-flat-primary part_tool_button">提交</a>
+        </div>
+        <br>
+    </div>
+    <div id="flash_message">
+        <div class="button glow button-rounded button-flat-action flash-notice">
+        </div>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/autoTextarea.js' 
+        '@OnlineTestMainBundle/Resources/public/js/exam.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

@@ -1,0 +1,50 @@
+{% extends '::base.html.twig' %}
+{% block stylesheets %}
+    {{ parent() }}
+    {%  stylesheets                
+                '@OnlineTestAdminBundle/Resources/public/css/theme.blue.css'
+                '@OnlineTestAdminBundle/Resources/public/css/admin.css'
+                '@OnlineTestAdminBundle/Resources/public/css/jquery-ui.min.css'
+                
+                
+    %}
+    <link rel="stylesheet" href="{{asset_url}}"/>
+    {% endstylesheets %}
+    
+{% endblock %}
+{% block menu %}
+    <span style="float: left;">你好，{% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}{{ app.user.username }}{% endif %}!&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    <span id="welcome_date" style="margin-right: 10px;float: left;"></span>
+    <a href="{{ url('admin_homepage') }}">系统相关</a>
+    <a href="{{ url('add_student') }}">学生管理</a>
+    {% if is_granted("ROLE_SUPER_ADMIN") %}
+            <a href="{{ url('teacher_activation') }}">教师管理</a>
+    {% endif %}
+    <a href="{{ url('exam_list',{"exam_status":"all"}) }}">考试管理</a>
+    <a href="{{ url('result_list') }}">结果管理</a>
+    <a href="{{ url('logout') }}" class="loginout">退出系统</a>
+{% endblock %}
+{% block main %}
+    <div id="admin_main_left">
+        {% block admin_main_left %}
+        {% endblock %}
+    </div>
+    <div id="admin_main_right">
+        {% block admin_main_right %}
+            <div id="function_title">
+                {% block function_title %}                
+                {% endblock %}
+            </div>
+            <div id="function_content">
+                {% block function_content %}  
+                {% endblock %}
+            </div>
+        {% endblock %}
+    </div>
+{% endblock%}
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts '@OnlineTestAdminBundle/Resources/public/js/admin.js' %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'OnlineTestAdminBundle:Admin:aboutSystem.html.twig' %}
+
+{% block function_title %}
+    <span>修改个人信息</span>
+{% endblock %}
+{% block function_content %}
+    {% block fos_user_content %}
+        {% include "FOSUserBundle:Profile:edit_content.html.twig" %}
+    {% endblock fos_user_content %}
+{% endblock %}

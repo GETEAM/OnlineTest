@@ -1,0 +1,15 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('add_student') }}" class="button button-rounded button-flat-primary">添加学生</a></li> 
+    </ul>
+    <ul>
+        <li><a href="{{ url('import_student') }}" class="button button-rounded button-flat-primary">导入学生</a></li> 
+    </ul>
+    <ul>
+        <li><a href="{{ url('student_list') }}" class="button button-rounded button-flat-primary">学生列表</a></li> 
+    </ul>
+    <ul>
+        <li><a href="{{ url('student_profile') }}" class="button button-rounded button-flat-primary">学生查询与修改</a></li> 
+    </ul>
+{% endblock %}

@@ -1,0 +1,136 @@
+{% extends 'OnlineTestAdminBundle:Admin:examManagement.html.twig' %}
+{% block function_title %}
+    <span>考试列表</span>
+{% endblock %}
+{% block function_content %}
+    <div class="operation_func">
+        <a href="#" onclick="open_add_dialog()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/add.png') }}"/>添加考试
+        </a>
+        <a href="#" onclick="endSelectedExams()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>结束选中试卷
+        </a>
+        <a href="#" onclick="restartSelectedExams()" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/enable.png') }}"/>重新启用选中试卷
+        </a>
+    </div> 
+    <table id="examslist">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll" class="checkall"></th>
+                <th>序号</th>
+                <th>编号</th>
+                <th>考试名称</th>
+                <th>开始时间</th>
+                <th>结束时间</th>
+                <th>是否实名</th>
+                <th>
+                    <select id="exam_status">
+                        <option value="all" {% if exam_status=="all" %}selected{% endif %}>全部状态</option>
+                        <option value="0" {% if exam_status=="0" %}selected{% endif %}>进行中</option>
+                        <option value="1" {% if exam_status=="1" %}selected{% endif %}>已结束</option>
+                    </select>
+                </th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if hasExams==0 %}
+                <tr>
+                    <td colspan="9">暂无考试，请添加或者查看其他考试状态！</td>
+                </tr>
+            {% endif %}
+            {% if hasExams==1 %}
+            {% for exam in exams %}
+               <tr>
+                    <td><input type="checkbox" name="checkOne" class="checkall" value="{{ exam.id }}" /></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ exam.id }}</td>
+                    <td>{{ exam.examName }}</td>
+                    <td>{{ exam.starttime|date("Y-m-d H:i") }}</td>
+                    <td>{{ exam.endtime|date("Y-m-d H:i")}}</td>
+                    <td>
+                        {%if exam.isRealName==0 %}{{ '匿名' }}{% endif %}
+                        {%if exam.isRealName==1 %}{{ '实名' }}{% endif %}
+                    </td>
+                    <td>
+                        {%if exam.isOverAndSave==0 %}{{ '进行中' }}{% endif %}
+                        {%if exam.isOverAndSave==1 %}{{ '已结束' }}{% endif %}
+                    </td>
+                    <td>
+                        {%if exam.isOverAndSave==0 %}
+                            <a href="{{ url('add_questions', {
+                                        'examId': exam.id }) }}" 
+                               class="button button-rounded button-flat-primary button-tiny search_buttun" 
+                               style="padding:0px;width:40px;margin-left: 0px;">
+                                出题
+                            </a>
+                            <a href="#" onclick="endExam({{ exam.id }})" 
+                               class="button button-rounded button-flat-primary button-tiny search_buttun" 
+                               style="padding:0px;width:40px;margin-left: 0px;">
+                                结束
+                            </a>
+                        {% else %}
+                            <a href="{{ url('add_questions', {
+                                        'examId': exam.id }) }}" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:40px;margin-left: 0px;">
+                                查看
+                            </a>
+                            <a href="#" onclick="restartExam({{ exam.id }})" 
+                               class="button button-rounded button-flat-primary button-tiny search_buttun" 
+                               style="padding:0px;width:40px;margin-left: 0px;">
+                                启用
+                            </a>
+                        {% endif %}
+                        
+                    </td>
+                </tr>
+            {% endfor %} 
+            {% endif %}
+        </tbody>
+    </table>
+    <div id="dialog_add_exam" title="添加考试" style="clear: right;">
+        <form id="add_exam">
+            <fieldset>
+                <div>
+                    <label for="add_examName" class="dialog_label">考试名称：</label>
+                    <input type="text"  class="dialog_input" name="examName" id="add_examName"  class="text ui-widget-content ui-corner-all">
+                </div>
+                <div>
+                    <label for="add_starttime" class="dialog_label">开始时间：</label>
+                    <input type="text"  class="dialog_input" name="starttime" id="add_starttime"  class="text ui-widget-content ui-corner-all">
+                </div>
+                <div>
+                    <label for="add_endtime" class="dialog_label" >截止时间：</label>
+                    <input type="text"  class="dialog_input"  name="edntime" id="add_endtime"  class="text ui-widget-content ui-corner-all">
+                </div>
+                <div>
+                    <label class="dialog_label">是否实名：</label>
+                    <input type="radio" id="add_realname_radio0" name="add_realname_radio" value="0" >
+                    <label for="add_realname_radio0" class="dialog_radio_label" >匿名</label>
+                    <input type="radio" id="add_realname_radio1" name="add_realname_radio" value="1" checked >
+                    <label for="add_realname_radio1" class="dialog_radio_label" >实名</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts  
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.tablesorter.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui-timepicker-addon.js'
+        '@OnlineTestAdminBundle/Resources/public/js/examList.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

@@ -1,0 +1,21 @@
+{% trans_default_domain 'FOSUserBundle' %}
+
+<form action="{{ path('fos_user_registration_register') }}" {{ form_enctype(form) }} method="POST" class="fos_user_registration_register">
+    <div class="admin_formRow">
+        <div class="alert" style="margin-right: 30px; background-color: #e5e5e5;">
+            <h5>
+                温馨提示：
+            </h5> 
+            注册完成后，系统管理员会在一个工作日内帮您激活（节假日除外），如有特殊情况或逾期仍未激活者，请联系：<strong>高峰 15656590431</strong>
+        </div>
+    </div>
+    {{ form_start(form, {'attr': {'novalidate': 'novalidate'} }) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.username, {'attr': {'placeholder': '请输入用户名'} }) }}
+        {{ form_row(form.name, {'attr': {'placeholder': '请输入姓名'} }) }}
+        {{ form_row(form.email, {'attr': {'placeholder': '请输入邮箱'} }) }}
+        {{ form_row(form.plainPassword) }}
+        {{ form_row(form.save, {'attr': {'class': 'button button-rounded button-flat-action submitButtonStyle'} }) }}
+        {{ form_row(form.cancel, {'attr': {'class': 'button button-rounded resetButton resetButtonStyle'} }) }}
+    {{ form_end(form, {'render_rest': true}) }}
+</form>

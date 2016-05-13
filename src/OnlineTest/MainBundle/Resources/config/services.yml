@@ -1,0 +1,7 @@
+parameters:
+#    online_test_main.example.class: OnlineTest\MainBundle\Example
+
+services:
+#    online_test_main.example:
+#        class: %online_test_main.example.class%
+#        arguments: [@service_id, "plain_value", %parameter%]

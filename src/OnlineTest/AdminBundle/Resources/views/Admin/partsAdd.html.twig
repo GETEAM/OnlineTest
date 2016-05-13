@@ -1,0 +1,157 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('add_parts',{'paperId': paper.id}) }}" class="button button-rounded button-flat-primary">组卷</a></li> 
+    </ul>
+{% endblock %}
+{% block function_title %}
+    <span>组卷</span>
+{% endblock %}
+{% block function_content %}
+    <div id="paper_infor">
+        <div id="examId" hidden>{{ exam.id }}</div>
+        <div class="font_examName">
+            {{ exam.examName }}
+        </div>
+        <div id="paperId" hidden>{{ paper.id }}</div>
+        <div class="font_paperInfor">
+            {{ paper.paperName }}
+        </div>
+        <div class="font_paperInfor">
+            开始时间：{{ exam.starttime|date("Y-m-d H:i") }}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            开始时间：{{ exam.endtime|date("Y-m-d H:i") }}
+        </div>
+    </div>
+    
+    <div id="parts_area">
+        {% if hasParts==0 %}
+            <div id="hasParts">该试卷暂无考题块，请点击右侧功能图标进行添加。</div>
+        {% else %}
+            <ul>
+                {% for key, part in parts %}
+                    <li><a href="#Part{{ key+1 }}">Part {{ key+1 }}</a></li>
+                    {% endfor %}
+            </ul>
+            {% for key, part in parts %}
+                <div id="Part{{ key+1 }}" class="part_area">
+                    {% for key, questionId in part['questions'] %}
+                        <div id="question_{{ questionId }}" class="questions">
+                            <span class="order_num">{{ loop.index }}</span>
+                            <span class="question_infor">{% 
+                    if questions[questionId].isMustSelect==1 
+                                %}(必选){% 
+                    else %}(可选){% endif %}({{ questions[questionId].kind }})</span>
+                            <span class="question_id" hidden>{{ questionId }}</span>
+                            <span class="question_isMustSelect" hidden>{{ questions[questionId].isMustSelect }}</span>
+                            <span class="question_kind" hidden>{{ questions[questionId].kind }}</span>
+                            <span class="question_isOptionShuffle" hidden>{{ questions[questionId].isOptionShuffle }}</span>
+                            {% if questions[questionId].type == 'single_choice_no_img' %}
+                                <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                                {% for key,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key+1 }}"  
+                                name="question_{{ questions[questionId].id }}_option_radio"  
+                                value="{{ key+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                        {% if questions[questionId].answer == (key+1) %}{{ 'checked' }}{% endif %}/><label  for="question_{{ questions[questionId].id }}_option_{{ key+1 }}" 
+                                class="option_label1">{{ question_option }}</label></pre>
+                                    {% endfor %}
+                            {% elseif questions[questionId].type == 'single_choice_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span>
+                                    {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                                    {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_radio"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                        {% if questions[questionId].answer == (key1+1) %}{{ 'checked' }}{% endif %}/><label  for="question_{{ questions[questionId].id }}_option_{{ key1+1 }}" 
+                                class="option_label1"><span>{{ question_option }}</span>{% if questions_images[questionId][key1+1]!="0" and  question_option!="" %}</br>{% endif %}{%if questions_images[questionId][key1+1]%}<img src="/{{ questions_images[questionId][key1+1] }}"/>{%endif%}</label></pre>
+                                {% endfor %}
+                            {% elseif questions[questionId].type == 'multiple_choices_no_img' %}
+                                <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                                {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                                    <pre><input  type="checkbox" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_checkbox"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                        {% if (key1+1) in mul_choices_answers[questionId] %}{{ 'checked' }}{% endif %}/><label  for="question_{{ questionId }}_option_{{ key1+1 }}" 
+                                class="option_label1">{{ question_option }}</label></pre>
+                                {% endfor %}
+                            {% elseif questions[questionId].type == 'short_answer_no_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span><br/>         
+                            {% elseif questions[questionId].type == 'short_answer_img'%}
+                                <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span>         
+                                {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                            {% endif %}
+                
+            </div>
+
+                    {% endfor %}
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+    <div id="parts_tool">
+        {% if paper.usable==1 %}
+            <a href="#" onclick="open_add_part_dialog()" class="button glow button-rounded button-flat-primary part_tool_button">添加试题块</a>
+            <a href="/admin/paper_list/{{ exam.id }}" class="button glow button-rounded button-flat-primary part_tool_button">返回列表</a>
+        {% else %}
+            <a href="#" class="button glow button-rounded button-flat-primary part_tool_button">非编辑状态</a>
+            <a href="/admin/paper_list/{{ exam.id }}" class="button glow button-rounded button-flat-primary part_tool_button">返回列表</a>
+        {% endif %}
+    </div>
+    <div id="dialog_add_part" title="添加试题块">
+        <div id="contain_kind">
+            <label for="parts_kind" class="dialog_label">包含类别：</label>
+            <select id="parts_kind" class="text ui-widget-content ui-corner-all dialog_input"> 
+                <option name="parts_kind_options" value ="all">全部</option>
+                {% for key, kind in kinds %}
+                    <option name="parts_kind_options" value ="{{ kind }}">{{ kind }}</option>  
+                {% endfor %}
+            </select>
+        </div>
+        <div>
+            <label for="part_order" class="dialog_label">试题乱序：</label>
+            <input type="radio" id="part_order_radio0" name="part_order_radio" value="0" >
+            <label for="part_order_radio0" class="dialog_radio_label" >否&nbsp;&nbsp;&nbsp;&nbsp;</label>
+            <input type="radio" id="part_order_radio1" name="part_order_radio" value="1" checked >
+            <label for="part_order_radio1" class="dialog_radio_label" >是&nbsp;&nbsp;&nbsp;&nbsp;</label>
+        </div>
+        <div style="width:561px;">
+            <label for="parts_duration" class="dialog_label">试卷时长：</label>
+            <input type="text"  class="dialog_input" name="duration" id="parts_duration"  class="text ui-widget-content ui-corner-all"  value="0" style="width:150px;">
+            <span style="padding-right: 245px;text-align: left;">分钟</span>
+        </div>
+        </br>
+        <div>
+            <label for="parts_questions_num" class="dialog_label">试题数量：</label>
+            <input type="text"  class="dialog_input" name="questions_num" id="parts_questions_num"  class="text ui-widget-content ui-corner-all"  value="0" style="width:150px;">
+            <span style="width:200px;text-align: left;">个</span>
+        </div>
+        
+    </div>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/autoTextarea.js'
+        '@OnlineTestAdminBundle/Resources/public/js/ajaxfileupload.js'
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.combox.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/partsAdd.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

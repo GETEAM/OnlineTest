@@ -1,0 +1,174 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="#" class="button button-rounded button-flat-primary">答卷详情</a></li> 
+    </ul>
+    </br>
+    </br>
+    <div id="student_infor" class="left_infor">
+        <div class="left_title">
+            考生信息
+        </div>
+            <div id="student_username" hidden>{% if exam_record.student 
+                            %}{{ exam_record.student.username }}{% else %}匿名{% endif %}
+            </div>
+            <div>
+                {% if exam_record.student 
+                %}考号：{{ exam_record.student.studentName }}{% else %}匿名{% endif %}
+            </div>
+            <div>
+                {% if exam_record.student 
+                %}姓名：{{ exam_record.student.name }}{% else %}匿名{% endif %}
+            </div>
+    </div>
+{% endblock %}
+{% block function_title %}
+    <span>答卷详情</span>
+{% endblock %}
+{% block function_content %}
+    <div id="paper_infor">
+        <div id="paperId" hidden>{{ paper.id }}</div>
+        <div class="font_examName">
+            {{ paper.exam.examName }}
+        </div>
+        <div class="font_paperInfor">
+            {{ paper.paperName }}
+        </div>
+        <div class="font_paperInfor">
+            开始时间：{{ paper.exam.starttime|date("Y-m-d H:i") }}
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            结束时间：{{ paper.exam.endtime|date("Y-m-d H:i") }}
+        </div>
+    </div>
+    <div id="parts_area">
+        {% if hasParts==0 %}
+            <div id="hasParts">该试卷暂无考题块，请点击右侧功能图标进行添加。</div>
+        {% else %}
+            <ul>
+                {% for key, part in parts %}
+                    <li><a href="#Part{{ key+1 }}">Part {{ key+1 }}</a></li>
+                    {% endfor %}
+            </ul>
+            {% for key, part in parts %}
+                <div id="Part{{ key+1 }}" class="part_area">
+                {% for key, questionId in part['questions'] %}
+                    <div id="question_{{ questionId }}" class="questions">
+                    <span class="order_num">{{ loop.index }}</span>
+                    <span class="question_id" hidden>{{ questionId }}</span>
+                    {% if questions[questionId].type == 'single_choice_no_img' %}
+                    <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                    {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                        <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_radio"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                {% if questionId in answers|keys %}
+                                    {% if answers[questionId] == (key1+1) %}
+                                         {{ 'checked' }}
+                                    {% endif %}
+                                {% endif %}/><label  
+                                {% if questionId in answers|keys %}
+                                    {% if questions[questionId].answer==(key1+1) %}
+                                        class="option_label1 right_option"
+                                    {% elseif  answers[questionId]==(key1+1) and questions[questionId].answer!=answers[questionId]%}
+                                        class="option_label1 wrong_option"
+                                    {% else %}
+                                        class="option_label1" 
+                                    {% endif %}
+                                {% else %}
+                                    {%if questions[questionId].answer==(key1+1)%}
+                                        class="option_label1 right_option"
+                                    {% else %}
+                                        class="option_label1" 
+                                    {% endif %}
+                                {% endif %} for="question_{{ questionId }}_option_{{ key1+1 }}" >{{ question_option }}</label></pre>
+                    {% endfor %}
+                    {% elseif questions[questionId].type == 'single_choice_img'%}
+                    <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span>
+                        {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                    {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                        <pre><input  type="radio" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_radio"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                {% if questionId in answers|keys %}
+                                    {% if answers[questionId] == (key1+1) %}
+                                        {{ 'checked' }}
+                                    {% endif %}
+                                {% endif %}/><label 
+                                {% if questionId in answers|keys %}
+                                    {% if questions[questionId].answer==(key1+1) %}
+                                        class="option_label1 right_option"
+                                    {% elseif  answers[questionId]==(key1+1) and questions[questionId].answer!=answers[questionId]%}
+                                        class="option_label1 wrong_option"
+                                    {% else %}
+                                        class="option_label1" 
+                                    {% endif %}
+                                {% else %}
+                                    class="option_label1" 
+                                {% endif %} for="question_{{ questionId }}_option_{{ key1+1 }}" ><span>{{ question_option }}</span>{% if questions_images[questionId][key1+1]!="0" and  question_option!="" %}</br>{% endif %}{%if questions_images[questionId][key1+1]%}<img src="/{{ questions_images[questionId][key1+1] }}"/>{%endif%}</label></pre>
+                    {% endfor %}
+                    {% elseif questions[questionId].type == 'multiple_choices_no_img' %}
+                    <span class="question_stem">{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br  }}</span><br/>
+                    {% for key1,question_option in questions_content[questionId]['question_options'] %}
+                        <pre><input  type="checkbox" id="question_{{ questionId }}_option_{{ key1+1 }}"  
+                                name="question_{{ questionId }}_option_checkbox"  
+                                value="{{ key1+1 }}"  
+                                class="option_radio"  
+                                disabled 
+                                {% if questionId in answers|keys %}
+                                    {% if (key1+1) in answers[questionId] %}
+                                         {{ 'checked' }}
+                                    {% endif %}
+                                {% endif %}/><label  
+                                {% if questionId in answers|keys %}
+                                    {% if (key1+1) in mul_choices_answers[questionId] %}
+                                        class="option_label1 right_option"
+                                    {% elseif  (key1+1) in answers[questionId]
+                                            and (key1+1) not in mul_choices_answers[questionId]%}
+                                        class="option_label1 wrong_option"
+                                    {% else %}
+                                        class="option_label1" 
+                                    {% endif %}
+                                {% else %}
+                                    {%if (key1+1) in mul_choices_answers[questionId]%}
+                                        class="option_label1 right_option"
+                                    {% else %}
+                                        class="option_label1" 
+                                    {% endif %}
+                                {% endif %} for="question_{{ questionId }}_option_{{ key1+1 }}" >{{ question_option }}</label></pre>
+                    {% endfor %}
+                    {% elseif questions[questionId].type == 'short_answer_no_img'%}
+                    <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span><br/>         
+                    <pre>答：<textarea id="question_{{ questionId }}_answer" 
+                              class='text ui-widget-content ui-corner-all question_textarea1' 
+                              placeholder="请输入答案">{% if questionId in answers|keys %}{{ answers[questionId] }}{% endif %}</textarea></pre>
+                    {% elseif questions[questionId].type == 'short_answer_img'%}
+                    <span class="question_stem"><span>{{ questions_content[questionId]['question_stem']|replace({' ': "&nbsp;"})|raw|nl2br }}</span></span>         
+                    {%if questions_images[questionId][0]%}<br/><img src="/{{ questions_images[questionId][0] }}"/>{% endif %}</span><br/>
+                    <pre>答：<textarea id="question_{{ questionId }}_answer" 
+                              class='text ui-widget-content ui-corner-all question_textarea1' 
+                              placeholder="请输入答案">{% if questionId in answers|keys %}{{ answers[questionId] }}{% endif %}</textarea></pre>
+                {% endif %}
+                
+            </div>
+                    {% endfor %}
+            </div>
+            {% endfor %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.js'
+        '@OnlineTestAdminBundle/Resources/public/js/autoTextarea.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/answerDetail.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

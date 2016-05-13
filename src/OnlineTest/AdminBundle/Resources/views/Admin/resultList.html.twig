@@ -1,0 +1,78 @@
+{% extends 'OnlineTestAdminBundle:Admin:resultManagement.html.twig' %}
+{% block function_title %}
+    <span>考试结果列表</span>
+{% endblock %}
+{% block function_content %}
+    {% form_theme form _self %}   
+    <div id="search_form">
+        <form action="" {{ form_enctype(form) }} method="POST" enctype="multipart/form-data">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form.examName)}}
+            {{ form_widget(form.search, {'attr': 
+                                        {'class': 'button button-rounded button-flat-primary button-tiny search_buttun'} 
+                                    }) }}
+            {{ form_end(form, {'render_rest': true}) }}
+        </form>
+    </div>
+    <table id="resultlist">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>试卷编号</th>
+                <th>试卷名称</th>
+                <th>试卷时长</th>
+                <th>试卷状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if hasPapers==0 %}
+                <tr>
+                    <td colspan="7">该考试暂无试卷，请添加！</td>
+                </tr>
+            {% endif %}
+            {% if hasPapers==-1 %}
+                <tr>
+                    <td colspan="7">请选择考试，查询结果！</td>
+                </tr>
+            {% endif %}
+            {% if hasPapers==1 %}
+                {% for paper in papers %}
+                    <tr>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ paper.id }}</td>
+                        <td>{{ paper.paperName }}</td>
+                        <td>{{ paper.duration }}分钟</td>
+                        <td>
+                            {%if paper.usable==0 %}{{ '过期' }}{% endif %}
+                            {%if paper.usable==1 %}{{ '可用' }}{% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url('result_detail', {
+                                    'paperId': paper.id }) }}" target="_blank" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:60px;margin-left: 0px;">
+                                结果详情
+                            </a>&nbsp;
+                            <a href="{{ url('result_statistics', {
+                                    'paperId': paper.id }) }}" target="_blank" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:60px;margin-left: 0px;">
+                                统计信息
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+        </tbody>
+    </table>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.tablesorter.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.min.js'  
+        '@OnlineTestAdminBundle/Resources/public/js/resultList.js'  
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

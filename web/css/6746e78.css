@@ -1,0 +1,468 @@
+#admin_main_left {
+    margin-top: 10px;
+    width: 180px;
+    border-bottom: 1px solid #D3D3D3;
+    border-top: 1px solid #D3D3D3;
+    border-right: 1px solid #D3D3D3;
+    min-height: 400px;
+    height: auto;
+    overflow: hidden;
+    float: left;
+    padding-bottom: 10px;
+}
+#admin_main_left ul,#admin_main_left ul li{
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+}
+#admin_main_left ul li a {
+    padding: 2px;
+    width: 150px;
+    height: 30px;
+    margin-left: 15px;
+    margin-top: 10px;
+    background-color: #31ae86;
+}
+#admin_main_left ul li a:hover {
+    background-color: #008e66;
+}
+#admin_main_right {
+    padding: 10px;
+    margin-top: 10px;
+    padding-bottom: 20px;
+    width: 780px;
+    border-bottom: 1px solid #D3D3D3;
+    border-top: 1px solid #D3D3D3;
+    border-left: 1px solid #D3D3D3;
+    min-height: 450px;
+    height: auto;
+    float: right;
+    overflow: hidden;
+}
+#function_title {
+    padding-bottom: 5px;
+    font-size: 15px;
+    font-family: "楷体","楷体_GB2312";
+    line-height: 20px;
+    color: #272e34;
+    text-align: left;
+    border-bottom: 2px solid #D3D3D3;
+    margin-bottom: 15px;
+}
+#function_content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+.admin_formRow {
+    width: 750px;
+    margin-top: 3px;
+    margin-bottom: 3px;
+    display: inline-block;
+    clear: both;
+}
+.admin_labelFont {
+    text-align: right;
+    width: 120px;
+    font-weight: normal;
+    font-size: 15px;
+    float: left;
+    line-height: 30px;
+}
+.admin_inputStyle {
+        line-height: 32px;
+        height: 32px;
+	width: 250px;
+	border: 1px solid #c3c3c3;
+	clear: right;
+	background-color: #eef3f7;
+        padding-left: 5px; 
+        margin-left: 5px;
+        float: left;
+}
+.admin_radioStyle {
+        height: 32px;
+	border: none;
+	clear: right;
+        line-height: 32px;
+        font-weight: normal;
+	background-color: #eef3f7;
+        padding-left: 5px; 
+        margin-left: 5px;
+        float: left;
+}
+.admin_radioStyle label{
+    font-weight: normal;
+    margin-left: 2px;
+    margin-right: 10px;
+}
+.admin_formRow ul, .admin_formRow ul li {
+    list-style: none;
+    margin: 0px;
+    padding: 0px;
+    padding-left: 5px;
+    float: left;
+    color: #e54028;
+}
+.input_error {
+    font-weight: normal;
+    font-size: 15px;
+    float: left;
+    line-height: 30px;
+    float: left;
+    color: #e54028;
+    margin-left: 5px;
+}
+.input_right {
+    font-weight: normal;
+    font-size: 15px;
+    float: left;
+    line-height: 30px;
+    float: left;
+    color: #31ae86;
+    margin-left: 5px;
+}
+.input_hint {
+    font-weight: normal;
+    font-size: 15px;
+    float: left;
+    line-height: 30px;
+    float: left;
+    color: #d87e04;
+    margin-left: 5px;
+}
+.submitButtonStyle {
+    width: 100px;
+    background-color: #31ae86;
+    margin-top: 10px;
+    margin-left: 105px;
+    float: left
+}
+.submitButtonStyle:hover {
+       background-color: #008e66; 
+}
+.resetButtonStyle {
+    width: 100px;
+    margin-top: 10px;
+    margin-left: 50px;
+    float: left;
+}
+.admin_pFont {
+    margin-left: 50px;
+    line-height: 32px;
+}
+.operation_func {
+    width: 740px;
+    height: 30px;
+    border: 1px solid #D3D3D3;
+    background-color: #D6D6D6;
+    padding-left: 10px;
+    padding-right: 10px;
+    line-height: 30px;
+}
+table {
+    width: 740px;
+    border: 1px solid #D3D3D3;
+}
+thead {
+    border-bottom: 1px solid #D3D3D3;
+}
+th {
+    color: #272e34;
+    text-align: left;
+    font-size: 15px;
+    line-height: 30px;
+    font-family: "楷体","楷体_GB2312";
+}
+tr {
+    color: #272e34;
+    text-align: left;
+    font-size: 12px;
+    line-height: 30px;
+    border-bottom: 1px dashed #D3D3D3;
+}
+
+input[type="checkbox"] {
+    display: table-cell; 
+    vertical-align:central;
+}
+#flash_message, #importing {
+    position: absolute;
+    left: 650px;
+    top: 350px;
+    display: none;
+}
+#search_form {
+    margin-bottom: 15px;
+}
+.search_input {
+    height: 20px;
+}
+.search_buttun {
+    margin-left: 5px;
+    height: 20px;
+    background-color: #31ae86;
+}
+.search_buttun:hover {
+    background-color: #008e66; 
+}
+.page_bar {
+    width: 740px;
+    height: auto;
+    border: 1px solid #D3D3D3;
+    background-color: #D6D6D6;
+    line-height: 30px;
+    color: #31ae86;
+    overflow: hidden;
+}
+.page_bar a {
+    padding-left: 5px;
+    padding-right: 5px;
+    background-color:#31ae86;
+}
+.page_bar a:hover {
+    line-height: 30px;
+    color: #ffffff;
+    background-color:#008e66;
+}
+.page_checked {
+    color: #272e34;
+}
+.dialog_label {
+    width: 100px;
+    text-align: right;
+    font-weight: normal;
+    margin-bottom: 5px;
+    margin-top: 5px;
+    float: left;
+}
+.dialog_radio_label {
+    font-weight: normal;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+.dialog_input {
+    width: 300px;
+    font-weight: normal;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+.dialog_textarea {
+    width: 400px;
+    font-weight: normal;
+    font-size: 10px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+.dialog_file {
+    width: 400px;
+    height: 30px;
+    margin-left: 100px;
+    margin-bottom: 5px;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+
+
+.ui-timepicker-div .ui-widget-header { margin-bottom: 8px; } 
+.ui-timepicker-div dl { text-align: left; } 
+.ui-timepicker-div dl dt { height: 25px; margin-bottom: -25px; } 
+.ui-timepicker-div dl dd { margin: 0 10px 10px 65px; } 
+.ui-timepicker-div td { font-size: 90%; } 
+.ui-tpicker-grid-label { background: none; border: none; margin: 0; padding: 0; } 
+.ui_tpicker_hour_label,.ui_tpicker_minute_label,.ui_tpicker_second_label, 
+.ui_tpicker_millisec_label,.ui_tpicker_time_label{padding-left:20px} 
+
+
+.ui-datepicker-calendar thead th td a{
+    margin: 0px;
+    padding: 0px;
+}
+.ui-datepicker-calendar tbody tr td a{
+    margin: 0px;
+    padding: 0px;
+}
+
+.font_examName{
+    margin-bottom: 5px;
+    margin-top: 5px;
+    text-align: center;
+    font-size: 30px;
+    font-weight: bold;
+}
+.font_paperInfor {
+    text-align: center;
+    margin-bottom: 5px;
+    margin-top: 5px;
+}
+#questions_area, .parts_area {
+    width: 720px;
+    margin-top: 10px;
+}
+.parts_area_ul_li {
+    padding: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#parts_area ul li a {
+    padding: 0px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+#questions_tool, #parts_tool{
+    text-align: center;
+    width:120px;
+    height: auto;
+    overflow: hidden;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border: 3px solid #c3c3c3;
+    position: fixed;
+    right:50px;
+    top: 400px;
+    border-radius: 4px;
+}
+.question_tool_button, .part_tool_button {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 30px;
+    background-color: #31ae86;
+    padding: 0px;
+    width: 100px;
+    color: #fff;
+    font-size: 15px;
+}
+.question_op {
+    margin-left: 5px;
+    height: 20px;
+    background-color: #31ae86;
+    padding: 0px;
+    width: 65px;
+    color: #fff;
+    font-size: 15px;
+}
+.question_op:hover  {
+    background-color:#008e66;
+}
+.question_tool_button:hover {
+    background-color:#008e66;
+}
+textarea {
+resize: none;
+}
+
+.questions {
+    padding: 5px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    background-color: #b2dba1;
+    height: auto;
+    overflow: hidden;
+    border-radius: 4px;
+    font-size: 15px;
+}
+.new_questions, .edited_questions {
+    border: 1px solid #e54028;
+}
+.option_radio {
+    float: left;
+    margin: 0px; 
+}
+.right_option {
+    color: #31ae86;
+}
+.question_textarea {
+    height: 100px;
+    width: 700px;
+    font-weight: normal;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+.question_textarea1 {
+    height: 100px;
+    width: 660px;
+    font-weight: normal;
+    font-size: 14px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    margin-left: auto;
+    margin-right: auto;
+    border: 1px solid #c3c3c3;
+    background-color: #eef3f7;
+    padding-left: 5px; 
+}
+.wrong_option {
+    color: #e54028;
+}
+.option_label {
+    width: 670px;
+    float: left;
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+.option_label1 {
+    width: 640px;
+    float: left;
+    font-weight: normal;
+    margin-bottom: 0px;
+}
+.questions pre {
+    margin-top: 5px;
+    margin-bottom: 0px;
+    background-color: #d6e9c6;
+    border: none;
+    padding: 3px;
+    font-size: 15px;  
+}
+.order_num {
+    font-size: 30px;
+    font-weight: 700;
+    padding-right: 10px;
+}
+.order_num1 {
+    font-size: 30px;
+    font-weight: 700;
+    padding-right: 10px;
+    text-decoration: underline;
+}
+.question_infor {
+    color: #d8891e;
+    font-size: 10px;
+}
+.questions_operations {
+    display: none;
+    text-align: right;
+    margin-top: 10px;
+}
+.statisticsFont {
+    color: #d87e04;
+}
+
+.left_infor {
+	margin: 5px;
+        padding: 5px;
+        border: 1px solid #D3D3D3;
+}
+.left_title {
+    background-color: #31ae86;
+    color: white;
+    text-align: center;
+    border-bottom: 1px solid #D3D3D3;
+    border-radius: 4px;
+    margin-bottom: 5px;
+    padding: 2px;
+}

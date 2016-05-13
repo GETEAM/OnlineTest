@@ -1,0 +1,27 @@
+{% extends 'OnlineTestMainBundle::student.html.twig' %}
+{% block stylesheets %}
+    {{ parent()}}
+    {%  stylesheets 
+                '@OnlineTestMainBundle/Resources/public/css/login.css' 
+    %}
+    <link rel="stylesheet" href="{{asset_url}}"/>
+    {% endstylesheets %}
+{% endblock %}
+
+{% block title %}登录{% endblock %}
+
+{% block main %}
+    <div style="text-align: center;height: 300px;font-size: 30px;line-height: 300px;color: #008e66;">
+        考试已完成，感谢您的参与！
+    </div>
+{% endblock%}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestMainBundle/Resources/public/js/studentLogin.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

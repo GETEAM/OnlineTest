@@ -1,0 +1,16 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="#" class="button button-rounded button-flat-primary">申请找回密码</a></li> 
+    </ul>
+{% endblock %}
+{% block menu %}
+{% endblock %}
+{% block function_title %}
+    <span>申请找回密码</span>
+{% endblock %}
+{% block function_content %}
+    {% block fos_user_content %}
+        {% include "FOSUserBundle:Resetting:request_content.html.twig" %}
+    {% endblock fos_user_content %}
+{% endblock %}

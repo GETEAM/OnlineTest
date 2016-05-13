@@ -1,0 +1,10 @@
+{% extends 'OnlineTestAdminBundle:Admin:aboutSystem.html.twig' %}
+
+{% block function_title %}
+    <span>查看个人信息</span>
+{% endblock %}
+{% block function_content %}
+    {% block fos_user_content %}
+        {% include "FOSUserBundle:Profile:show_content.html.twig" %}
+    {% endblock fos_user_content %}
+{% endblock %}

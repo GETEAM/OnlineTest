@@ -1,0 +1,9 @@
+{% block form_row %}
+    {% spaceless %}
+    <div class="admin_formRow">
+        {{ form_label(form, null, {'label_attr': {'class': 'admin_labelFont'} }) }}
+        {{ form_widget(form,  { 'attr': {'class': 'admin_inputStyle'} }) }}
+        {{ form_errors(form) }}
+    </div>
+    {% endspaceless %}
+{% endblock %}

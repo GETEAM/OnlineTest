@@ -1,0 +1,46 @@
+{% extends 'OnlineTestAdminBundle:Admin:studentManagement.html.twig' %}
+{% block function_title %}
+    <span>导入学生</span>
+{% endblock %}
+{% block function_content %}
+    <div class="admin_formRow">
+        <div class="alert" style="margin-right: 30px; background-color: #e5e5e5;">
+            <h5>
+                温馨提示：
+            </h5> 
+            导入学生时，请遵循以下规则：</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;1.导入文件支持格式有：csv</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;2.文件第一行多数为表头，不会获取</br>
+            &nbsp;&nbsp;&nbsp;&nbsp;3.文件各列内容应如下：考号,姓名,密码
+            
+        </div>
+    </div>
+    <form action="" {{ form_enctype(form) }} method="POST" enctype="multipart/form-data">
+        {{ form_start(form) }}
+        {{ form_errors(form) }}
+        {{ form_row(form.examName)}}
+        {{ form_row(form.fileUrl, {'attr': {'placeholder': '请输入考号', 'autocomplete': 'off'} }) }}
+        {{ form_row(form.import, {'attr': {'class': 'button button-rounded button-flat-action submitButtonStyle'} }) }}
+        {{ form_row(form.cancel, {'attr': {'class': 'button button-rounded resetButton resetButtonStyle'} }) }}
+        {{ form_end(form, {'render_rest': true}) }}
+    </form>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+    <div id="importing" class="button glow button-rounded button-flat-action flash-notice">
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/studentImport.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

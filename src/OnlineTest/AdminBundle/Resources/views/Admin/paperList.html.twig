@@ -1,0 +1,163 @@
+{% extends 'OnlineTestAdminBundle:Admin:examManagement.html.twig' %}
+{% block function_title %}
+    <span>试卷列表</span>
+{% endblock %}
+{% block function_content %}
+    {% form_theme form _self %}   
+    <div id="search_form">
+        <form action="" {{ form_enctype(form) }} method="POST" enctype="multipart/form-data">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form.examName)}}
+            {{ form_end(form, {'render_rest': true}) }}
+        </form>
+    </div>
+    <div class="operation_func">
+        <a href="#" onclick="open_add_dialog('{% if exam %}{{ exam.id }}{% endif %}',
+                                    '{% if exam %}{{ exam.examName }}{% endif %}')" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/add.png') }}"/>添加试卷
+        </a>
+        <a href="#" onclick="deleteSelectedPapers('{% if exam %}{{ exam.id }}{% endif %}')" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>删除
+        </a>
+    </div> 
+    <table id="paperslist">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll" class="checkall"></th>
+                <th>序号</th>
+                <th>试卷名称</th>
+                <th>试卷时长</th>
+                <th>使用状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if hasPapers==0 %}
+                <tr>
+                    <td colspan="7">该考试暂无试卷，请添加！</td>
+                </tr>
+            {% endif %}
+            {% if hasPapers==-1 %}
+                <tr>
+                    <td colspan="7">请选择考试，查询结果！</td>
+                </tr>
+            {% endif %}
+            {% for paper in papers %}
+               <tr>
+                    <td><input type="checkbox" name="checkOne" class="checkall" value="{{ paper.id }}" /></td>
+                    <td>{{ loop.index }}</td>
+                    <td>{{ paper.paperName }}</td>
+                    <td>{{ paper.duration }}分钟</td>
+                    <td>
+                        {%if paper.usable==0 %}{{ '过期' }}{% endif %}
+                        {%if paper.usable==1 %}{{ '可用' }}{% endif %}
+                    </td>
+                    <td>
+                        {%if paper.usable==1 %}
+                            <a href="{{ url('add_parts', {
+                                        'paperId': paper.id }) }}" id="{{ paper.id }}_disable_paper" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:40px;margin-left: 0px;">
+                                出卷
+                            </a>
+                            <a href="#" onclick="disable_paper({{ paper.id }});" id="{{ paper.id }}_disable_paper" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:40px;margin-left: 0px;">
+                                过期
+                            </a>
+                        {% endif %}
+                        {%if paper.usable==0 %}
+                            <a href="{{ url('add_parts', {
+                                        'paperId': paper.id }) }}"  id="{{ paper.id }}_disable_paper" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:40px;margin-left: 0px;">
+                                查看
+                            </a>
+                            <a href="#" onclick="enable_paper({{ paper.id }});" id="{{ paper.id }}_enable_paper" class="button button-rounded button-flat-primary button-tiny search_buttun" style="padding:0px;width:40px;margin-left: 0px;">
+                                启用
+                            </a>
+                        {% endif %}
+                        <a href="#" onclick="open_edit_dialog('{% if exam %}{{ exam.id }}{% endif %}',
+                                    '{{ exam.examName }}',
+                                    '{{ paper.id }}',
+                                    '{{ paper.paperName }}',
+                                    '{{ paper.duration}}',
+                                    '{{ paper.usable }}')" style="margin-left: 0px;">
+                                <img src="{{ asset('/bundles/onlinetestmain/images/edit.png') }}"/>
+                            </a>
+                        <a href="#" onclick="delconfirm('{% if exam %}{{ exam.id }}{% endif %}',{{ paper.id }})" style="margin-left: 0px;">
+                            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>
+                        </a>
+                    </td>
+                </tr>
+            {% endfor %} 
+        </tbody>
+    </table>
+    <div id="dialog_add_paper" title="添加试卷">
+        <form id="add_paper">
+            <fieldset>
+                <div>
+                    <input type="text" name="examId" id="add_examId"  class="text ui-widget-content ui-corner-all" hidden>
+                </div>
+                <div>
+                    <label for="add_examName" class="dialog_label">所属考试：</label>
+                    <input type="text"  class="dialog_input" name="examName" id="add_examName"  class="text ui-widget-content ui-corner-all" disabled>
+                </div>
+                <div>
+                    <label for="add_paperName" class="dialog_label">试卷名称：</label>
+                    <input type="text"  class="dialog_input" name="paperName" id="add_paperName"  class="text ui-widget-content ui-corner-all" >
+                </div>
+                <div>
+                    <label for="add_duration" class="dialog_label">试卷时长：</label>
+                    <input type="text"  class="dialog_input" name="duration" id="add_duration"  class="text ui-widget-content ui-corner-all"  value="0" style="width:50px;">
+                    <span style="width:50px;text-align: left;">分钟</span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="dialog_edit_paper" title="编辑试卷">
+        <form id="edit_paper">
+            <fieldset>
+                <div>
+                    <input type="text" name="edit-examId" id="edit_examId"  class="text ui-widget-content ui-corner-all" hidden>
+                </div>
+                <div>
+                    <label for="edit_examName" class="dialog_label">所属考试：</label>
+                    <input type="text"  class="dialog_input" name="edit-examName" id="edit_examName"  class="text ui-widget-content ui-corner-all" disabled>
+                </div>
+                <div>
+                    <input type="text" name="edit-paperId" id="edit_paperId"  class="text ui-widget-content ui-corner-all" hidden>
+                </div>
+                <div>
+                    <label for="edit_paperName" class="dialog_label">试卷名称：</label>
+                    <input type="text"  class="dialog_input" name="edit-paperName" id="edit_paperName"  class="text ui-widget-content ui-corner-all" >
+                </div>
+                <div>
+                    <label for="edit_usable_radio" class="dialog_label" id="edit_status">使用状态：</label>
+                    <input type="radio" id="edit_usable_radio0" name="edit_usable_radio" value="0"><label for="edit_usable_radio0" class="dialog_radio_label">过期</label>
+                    <input type="radio" id="edit_usable_radio1" name="edit_usable_radio" value="1"><label for="edit_usable_radio1" class="dialog_radio_label">可用</label>
+                </div>
+                <div>
+                    <label for="edit_duration" class="dialog_label">试卷时长：</label>
+                    <input type="text"  class="dialog_input" name="edit_duration" id="edit_duration"  class="text ui-widget-content ui-corner-all"  value="0" style="width:50px;">
+                    <span style="width:50px;text-align: left;">分钟</span>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery.tablesorter.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/paperList.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.min.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui-timepicker-addon.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

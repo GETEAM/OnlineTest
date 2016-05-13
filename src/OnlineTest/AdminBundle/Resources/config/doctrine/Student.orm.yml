@@ -1,0 +1,40 @@
+OnlineTest\AdminBundle\Entity\Student:
+    type: entity
+    table: null
+    repositoryClass: OnlineTest\AdminBundle\Entity\StudentRepository
+    manyToOne:
+        exam:
+            targetEntity: OnlineTest\AdminBundle\Entity\Exam
+            inversedBy: students
+            joinColumn:
+                name: exam_id
+                referencedColumn: id
+    oneToMany:
+        examRecords:
+            targetEntity: OnlineTest\MainBundle\Entity\ExamRecord
+            mappedBy: student            
+    
+    id:
+        id:
+            type: integer
+            id: true
+            generator:
+                strategy: AUTO
+    fields:
+        username:
+            type: string
+            length: 255
+        student_name:
+            type: string
+            length: 255
+        name:
+            type: string
+            length: 255
+        password:
+            type: string
+            length: 255
+        status:
+            type: integer
+            lenght: 2
+            nullable: false
+    lifecycleCallbacks: {  }

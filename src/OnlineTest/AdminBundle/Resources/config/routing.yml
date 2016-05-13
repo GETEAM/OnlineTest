@@ -1,0 +1,229 @@
+registration:
+    path: /register
+    defaults: { _controller: FOSUserBundle:Registration:register}
+
+resetting:
+    path: /resetting
+    defaults: { _controller: FOSUserBundle:Resetting:request}
+
+login:
+    path: /login
+    defaults: { _controller: FOSUserBundle:Security:login}
+logout:
+    path: /logout
+
+admin_homepage:
+    path:     /admin/homepage
+    defaults: { _controller: OnlineTestAdminBundle:Admin:index }
+
+admin_changePassword:
+    path: /admin/changePassword
+    defaults: { _controller: FOSUserBundle:ChangePassword:changePassword}
+
+admin_showInfo:
+    path: /admin/showInfo
+    defaults: { _controller: FOSUserBundle:Profile:show}    
+    
+admin_changeInfo:
+    path: /admin/changeInfo
+    defaults: { _controller: FOSUserBundle:Profile:edit}
+       
+teacher_activation:
+    path: /admin/teacher_activation
+    defaults: { _controller: OnlineTestAdminBundle:Admin:teacherActivation}
+
+delete_teacher:
+    path: /admin/delete_teacher/{username}
+    defaults: { _controller: OnlineTestAdminBundle:Admin:deleteTeacher}
+ 
+delete_selectedTeachers:
+    path: /admin/delete_selectedTeachers
+    defaults: { _controller: OnlineTestAdminBundle:Admin:deleteSelectedTeachers}    
+    
+active_teacher:
+    path: /admin/activeTeacher/{username}
+    defaults: { _controller: OnlineTestAdminBundle:Admin:activeTeacher}
+    
+active_selectedTeachers:
+    path: /admin/active_selectedTeachers
+    defaults: { _controller: OnlineTestAdminBundle:Admin:activeSelectedTeachers}
+    
+teacher_list:
+    path: /admin/teacher_list
+    defaults: { _controller: OnlineTestAdminBundle:Admin:teacherList}
+    
+deactive_teacher:
+    path: /admin/deactiveTeacher/{username}
+    defaults: { _controller: OnlineTestAdminBundle:Admin:deactiveTeacher}
+    
+deactive_selectedTeachers:
+    path: /admin/deactive_selectedTeachers
+    defaults: { _controller: OnlineTestAdminBundle:Admin:deactiveSelectedTeachers}
+    
+add_student:
+    path: /admin/add_student
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:addStudent}
+    
+import_student:
+    path: /admin/import_student
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:importStudent}
+    
+student_profile:  
+    path: /admin/student_profile
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:studentProflie}
+    
+student_list:  
+    path: /admin/student_list
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:studentList}
+    
+student_validation:
+    path: /admin/student_validation/{validation_option}
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:studentValidation}
+    
+delete_student:
+    path: /admin/delete_student/{examName}/{username}
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:deleteStudent}
+    
+delete_selectedStudents:
+    path: /admin/delete_selectedStudents/{examName}
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:deleteSelectedStudents}
+    
+update_student:
+    path: /admin/update_student
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:updateStudent}
+    
+update_selectedStudents:
+    path: /admin/update_selectedStudents
+    defaults: { _controller: OnlineTestAdminBundle:StudentManagement:updateSelectedStudents}
+    
+exam_list:
+    path: /admin/exam_list
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:examList}
+ 
+add_exam:
+    path: /admin/add_exam
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addExam}
+    
+end_exam:
+    path: /admin/end_exam/{examId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:endExam}
+    
+end_selectedExams:
+    path: /admin/end_selectedExams
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:endSelectedExams}
+    
+restart_exam:
+    path: /admin/restart_exam/{examId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:restartExam}
+    
+restart_selectedExams:
+    path: /admin/restart_selectedExams
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:restartSelectedExams}
+    
+paper_list:
+    path: /admin/paper_list/{examId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:paperList, examId: 0}
+    
+add_paper:
+    path: /admin/add_paper
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addPaper}
+    
+delete_paper:
+    path: /admin/delete_paper/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:deletePaper}
+    
+update_paper:
+    path: /admin/update_paper
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:updatePaper}
+    
+delete_selectedPapers:
+    path: /admin/delete_selectedPapers
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:deleteSelectedPapers}
+    
+exam_validation:
+    path: /admin/exam_validation/{validation_option}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:examValidation}
+    
+get_examNameOptions:
+    path: /admin/get_examNameOptions
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:getExamNameOptions}
+
+add_parts:
+    path: /admin/add_parts/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addParts}
+    
+add_part:
+    path: /admin/add_part/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addPart}
+    
+add_questions:
+    path: /admin/add_questions/{examId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addQuestions} 
+    
+get_exam_kinds:
+    path: /admin/get_exam_kinds
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:getExamKinds} 
+    
+enable_paper:
+    path: /admin/enable_paper/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:enablePaper} 
+    
+disable_paper:
+    path: /admin/disable_paper/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:disablePaper} 
+    
+add_question:
+    path: /admin/add_question
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:addQuestion} 
+    
+save_add:
+    path: /admin/save_add
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:saveAdd} 
+
+update_question:
+    path: /admin/update_question
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:updateQuestion} 
+    
+delete_question:
+    path: /admin/delete_question
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:updateQuestion} 
+    
+paper_prepared:
+    path: /admin/paper_prepared
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:paperPrepared} 
+    
+upload_images:
+    path: /admin/upload_images
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:uploadImages} 
+    
+upload_edit_images:
+    path: /admin/upload_edit_images
+    defaults: { _controller: OnlineTestAdminBundle:ExamManagement:uploadEditImages} 
+    
+result_list:
+    path: /admin/result_list
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:resultList} 
+    
+result_statistics:
+    path: /admin/result_statistics/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:resultStatistics} 
+    
+result_detail:
+    path: /admin/result_detail/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:resultDetail}
+    
+export_excel:
+    path: /admin/export_excel/{paperId}
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:exportExcel}
+    
+delete_exam_record:
+    path: /admin/delete_exam_record/{recordId}
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:deleteExamRecord} 
+    
+delete_selected_exam_record:
+    path: /admin/delete_selected_exam_record
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:deleteSelectedExamRecord}
+    
+answers_detail:
+    path: /admin/answers_detail/{recordId}
+    defaults: { _controller: OnlineTestAdminBundle:ResultManagement:answersDetail}

@@ -1,0 +1,9 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('exam_list',{"exam_status":"all"})  }}" class="button button-rounded button-flat-primary">考试列表</a></li> 
+    </ul>
+    <ul>
+        <li><a href="{{ url('paper_list') }}" class="button button-rounded button-flat-primary">试卷列表</a></li> 
+    </ul>
+{% endblock %}

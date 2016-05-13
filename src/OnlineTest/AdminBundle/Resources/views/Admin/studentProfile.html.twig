@@ -1,0 +1,145 @@
+{% extends 'OnlineTestAdminBundle:Admin:studentManagement.html.twig' %}
+{% block function_title %}
+    <span>学生查询与修改</span>
+{% endblock %}
+{% block function_content %}
+    {% form_theme form _self %}   
+    <div id="search_form">
+        <form action="" {{ form_enctype(form) }} method="POST" enctype="multipart/form-data">
+            {{ form_start(form) }}
+            {{ form_errors(form) }}
+            {{ form_widget(form.examName)}}
+            {{ form_widget(form.searchOption)}}
+            {{ form_widget(form.searchContent, {'attr': {'placeholder': '请输入查询内容',
+                                                     'autocomplete': 'off',
+                                                     'class': 'search_input'}
+                                            }) }}
+            {{ form_widget(form.search, {'attr': 
+                                        {'class': 'button button-rounded button-flat-primary button-tiny search_buttun'} 
+                                    }) }}
+            {{ form_end(form, {'render_rest': true}) }}
+        </form>
+    </div>
+    <div class="operation_func">
+        <a href="#" onclick="deleteSelectedStudents({% if exam %}{{ exam.id }}{% endif %})" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>删除
+        </a>
+        <a href="#" onclick="open_mul_edit_dialog({% if exam %}{{ exam.id }}{% endif %}, '{% if exam %}{{ exam.examName }}{% endif %}')" style="color: #000;margin-left: 0px;">
+            <img src="{{ asset('/bundles/onlinetestmain/images/edit.png') }}"/>修改
+        </a>
+    </div>
+    <table id="searched_students">
+        <thead>
+            <tr>
+                <th><input type="checkbox" id="checkAll" class="checkall"></th>
+                <th>序号</th>
+                <th>用户名</th>
+                <th>姓名</th>
+                <th>考试状态</th>
+                <th>所属考试</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if searched_students %}
+                {% for student in searched_students %}
+                    <tr>
+                        <td><input type="checkbox" name="checkOne" class="checkall" value="{{ student.studentName }}" /></td>
+                        <td>{{ loop.index }}</td>
+                        <td>{{ student.studentName }}</td>
+                        <td>{{ student.name }}</td>
+                        <td>{{ student.status }}</td>
+                        <td>{% if exam %}{{ exam.examName }}{% endif %}</td>
+                        <td>
+                            <a href="#" onclick="open_edit_dialog('{% if exam %}{{ exam.id }}{% endif %}',
+                                    '{{ exam.examName }}',
+                                    '{{ student.studentName }}',
+                                    '{{ student.name }}',
+                                    '{{ student.status }}')" style="margin-left: 0px;">
+                                <img src="{{ asset('/bundles/onlinetestmain/images/edit.png') }}"/>
+                            </a>
+                            <a href="#" onclick="delconfirm('{% if exam %}{{ exam.id }}{% endif %}','{{ student.studentName }}')" style="margin-left: 0px;">
+                                <img src="{{ asset('/bundles/onlinetestmain/images/delete.png') }}"/>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %} 
+            {% else %}
+                <tr>
+                    <td colspan="7">没有查询结果，请确认搜索条件</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+        
+    <div id="dialog_update_student" title="学生信息修改">
+        <form id="edit_student">
+            <fieldset>
+                <div>
+                    <input type="text" name="examId" id="edit_examId"  class="text ui-widget-content ui-corner-all" hidden>
+                </div>
+                <div>
+                    <label for="name" class="dialog_label">所属考试：</label>
+                    <input type="text"  class="dialog_input" name="examName" id="edit_examName"  class="text ui-widget-content ui-corner-all" disabled>
+                </div>
+                <div>
+                    <label for="name" class="dialog_label">考号：</label>
+                    <input type="text"  class="dialog_input" name="username" id="edit_username"  class="text ui-widget-content ui-corner-all" disabled>
+                </div>
+                <div>
+                    <label for="email" class="dialog_label">姓名：</label>
+                    <input type="text"  class="dialog_input" name="name" id="edit_name"  class="text ui-widget-content ui-corner-all">
+                </div>
+                <div>
+                    <label for="password" class="dialog_label" >密码：</label>
+                    <input type="password"  class="dialog_input" placeholder="如无需改变密码，请勿修改此项" name="password" id="edit_password"  class="text ui-widget-content ui-corner-all">
+                </div>
+                <div>
+                    <label for="password" class="dialog_label" id="edit_status">考试状态：</label>
+                    <input type="radio" id="radio1" name="status_radio" value="0"><label for="radio1" class="dialog_radio_label">未考</label>
+                    <input type="radio" id="radio2" name="status_radio" value="1"><label for="radio2" class="dialog_radio_label">在考</label>
+                    <input type="radio" id="radio3" name="status_radio" value="2"><label for="radio3" class="dialog_radio_label">已考</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="dialog_mul_update_student" title="学生信息修改">
+        <form id="edit_student">
+            <fieldset>
+                <div>
+                    <input type="text" name="mul_examId" id="mul_edit_examId"  class="text ui-widget-content ui-corner-all" hidden>
+                </div>
+                <div>
+                    <label for="name" class="dialog_label">所属考试：</label>
+                    <input type="text"  class="dialog_input" name="mul_examName" id="mul_edit_examName"  class="text ui-widget-content ui-corner-all" disabled>
+                </div>
+                <div>
+                    <label for="password" class="dialog_label" id="mul_edit_status">考试状态：</label>
+                    <input type="radio" id="mul_radio1" name="mul_status_radio" value="0"><label for="mul_radio1" class="dialog_radio_label">未考</label>
+                    <input type="radio" id="mul_radio2" name="mul_status_radio" value="1"><label for="mul_radio2" class="dialog_radio_label">在考</label>
+                    <input type="radio" id="mul_radio3" name="mul_status_radio" value="2"><label for="mul_radio3" class="dialog_radio_label">已考</label>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+    <div id="flash_message">
+        {% for flashMessage in app.session.flashbag.get('notice') %}
+            <div class="button glow button-rounded button-flat-action flash-notice">
+                {{ flashMessage }}
+            </div>
+        {% endfor %}
+    </div>
+    <div id="importing" class="button glow button-rounded button-flat-action flash-notice">
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    {%  javascripts 
+        '@OnlineTestAdminBundle/Resources/public/js/studentProfile.js' 
+        '@OnlineTestAdminBundle/Resources/public/js/jquery-ui.min.js' 
+    %}
+    <script type="text/javascript" src="{{asset_url}}"></script>
+    {% endjavascripts %}
+    
+{% endblock %}

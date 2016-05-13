@@ -1,0 +1,15 @@
+#menu a {
+    float: left;
+    color: #eeeeee;
+    margin-left: 10px;
+}
+#menu a:hover {
+    color: #272e34;
+}
+.loginout {
+    float: right!important;
+    margin-right: 10px!important;
+    padding-left: 15px;
+    padding-right: 15px;
+    border-left: 1px solid #eeeeee;
+}

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}在线调查测试平台{% endblock %}</title>
+        {% block stylesheets %}
+            {%  stylesheets 
+                '@OnlineTestMainBundle/Resources/public/css/publiccss/bootstrap.css'
+                '@OnlineTestMainBundle/Resources/public/css/publiccss/bootstrap-theme.min.css'
+                '@OnlineTestMainBundle/Resources/public/css/publiccss/button.css'
+                '@OnlineTestMainBundle/Resources/public/css/publiccss/menu.css'
+                '@OnlineTestMainBundle/Resources/public/css/publiccss/style.css'
+                filter='cssrewrite'
+            %}
+            <link rel="stylesheet" href="{{asset_url}}"/>
+            {% endstylesheets %}
+        {% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+    <body>
+        {% block content %}
+        <div id="box">
+            <div id="top">  	
+                <div id="menu">
+                    {% block menu %}                   
+                    {% endblock %}
+                </div>
+            </div>
+            <div id="main">
+                {% block main %}
+                {% endblock %}
+            </div>
+            <div id="bottom">
+            </div>
+        </div>
+        {% endblock %}
+    {% block javascripts %}
+        {%  javascripts 
+            '@OnlineTestMainBundle/Resources/public/js/public/jquery-1.9.1.js' 
+            '@OnlineTestMainBundle/Resources/public/js/public/bootstrap.js'
+        %}
+        <script type="text/javascript" src="{{asset_url}}"></script>
+        {% endjavascripts %}
+    {% endblock %}
+    </body>
+</html>

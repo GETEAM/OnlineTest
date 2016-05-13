@@ -1,0 +1,8 @@
+{% extends 'OnlineTestAdminBundle::admin.html.twig' %}
+{% block admin_main_left %}
+    <ul>
+        <li><a href="{{ url('admin_homepage') }}" class="button button-rounded button-flat-primary">系统介绍</a></li>
+        <li><a href="{{ url('admin_changePassword') }}" class="button button-rounded button-flat-primary">修改密码</a></li>
+        <li><a href="{{ url('admin_showInfo') }}" class="button button-rounded button-flat-primary">查看个人信息</a></li>
+    </ul>
+{% endblock %}
